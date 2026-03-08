@@ -1,0 +1,8 @@
+apiVersion: v2
+name: joegcservices
+description: OGC-standard weather data services (WMS, WMTS, EDR) for JoeGCServices
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: Joe

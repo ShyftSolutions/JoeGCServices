@@ -1,0 +1,18 @@
+{{- if .Values.webDashboard.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "joegcservices.fullname" . }}-web-dashboard
+  labels:
+    {{- include "joegcservices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web-dashboard
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: http
+      name: http
+  selector:
+    {{- include "joegcservices.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web-dashboard
+{{- end }}

@@ -1,0 +1,68 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "joegcservices.fullname" . }}
+  labels:
+    {{- include "joegcservices.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ .Values.global.domain }}
+  gateways:
+    - {{ .Values.istio.gateway }}
+  http:
+    # WMS API routes
+    - match:
+        - uri:
+            prefix: /wms
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-wms-api
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /wmts
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-wms-api
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /api
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-wms-api
+            port:
+              number: 8080
+    # EDR API
+    - match:
+        - uri:
+            prefix: /edr
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-edr-api
+            port:
+              number: 8083
+    # Downloader status/admin
+    - match:
+        - uri:
+            prefix: /downloader
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-data-pipeline-downloader
+            port:
+              number: 8081
+    {{- if .Values.webDashboard.enabled }}
+    # Web dashboard (catch-all, must be last)
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-web-dashboard
+            port:
+              number: 8000
+    {{- end }}
+{{- end }}

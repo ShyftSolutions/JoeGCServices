@@ -1,0 +1,41 @@
+JoeGCServices has been deployed!
+
+Services:
+  - WMS API:        {{ include "joegcservices.fullname" . }}-wms-api
+  - EDR API:        {{ include "joegcservices.fullname" . }}-edr-api
+  - Data Pipeline:  {{ include "joegcservices.fullname" . }}-data-pipeline
+  - Web Dashboard:  {{ include "joegcservices.fullname" . }}-web-dashboard
+
+Infrastructure:
+  - PostgreSQL:     {{ include "joegcservices.fullname" . }}-postgres
+  - Redis:          {{ include "joegcservices.fullname" . }}-redis
+  - MinIO:          {{ include "joegcservices.fullname" . }}-minio
+
+{{- if .Values.istio.enabled }}
+
+Istio VirtualService is enabled. Access the services at:
+  - WMS:        http://{{ .Values.global.domain }}/wms
+  - WMTS:       http://{{ .Values.global.domain }}/wmts
+  - EDR:        http://{{ .Values.global.domain }}/edr
+  - Dashboard:  http://{{ .Values.global.domain }}/
+  - Gateway:    {{ .Values.istio.gateway }}
+{{- else }}
+
+No VirtualService configured. Use port-forward to access services:
+  kubectl port-forward svc/{{ include "joegcservices.fullname" . }}-wms-api 8080:8080
+  kubectl port-forward svc/{{ include "joegcservices.fullname" . }}-edr-api 8083:8083
+{{- end }}
+
+Useful commands:
+  # Check pod status
+  kubectl get pods -n {{ .Release.Namespace }}
+
+  # View WMS API logs
+  kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=wms-api -f
+
+  # View data pipeline logs
+  kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=data-pipeline -c downloader -f
+
+  # Check downloader status
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "joegcservices.fullname" . }}-data-pipeline-downloader 8081:8081
+  curl http://localhost:8081/status

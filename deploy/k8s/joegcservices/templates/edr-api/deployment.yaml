@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "joegcservices.fullname" . }}-edr-api
+  labels:
+    {{- include "joegcservices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: edr-api
+spec:
+  replicas: {{ .Values.edrApi.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "joegcservices.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: edr-api
+  template:
+    metadata:
+      labels:
+        {{- include "joegcservices.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: edr-api
+    spec:
+      {{- include "joegcservices.imagePullSecrets" . | nindent 6 }}
+      containers:
+        - name: edr-api
+          image: {{ include "joegcservices.image" (dict "registry" .Values.global.image.registry "repository" .Values.edrApi.image.repository "tag" .Values.edrApi.image.tag) }}
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+          ports:
+            - containerPort: 8083
+              name: http
+          env:
+            - name: CONFIG_DIR
+              value: "/app/config"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "joegcservices.fullname" . }}-secrets
+                  key: DATABASE_URL
+            - name: S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "joegcservices.fullname" . }}-secrets
+                  key: S3_ENDPOINT
+            - name: S3_BUCKET
+              value: {{ .Values.minio.bucket | quote }}
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "joegcservices.fullname" . }}-secrets
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "joegcservices.fullname" . }}-secrets
+                  key: S3_SECRET_KEY
+            - name: EDR_BASE_URL
+              value: {{ include "joegcservices.edrBaseUrl" . | quote }}
+            {{- range $key, $value := .Values.edrApi.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.edrApi.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5

@@ -1,0 +1,76 @@
+# =============================================================================
+# JoeGCServices - Production Values Overlay
+# =============================================================================
+# Usage:
+#   ./scripts/deploy-k8s.sh --production
+#
+# Secrets are loaded from .env.k8s.production (see .env.k8s.production.example).
+# =============================================================================
+
+global:
+  domain: wxchange.shyftwx.com
+  image:
+    registry: 711051230276.dkr.ecr.us-east-2.amazonaws.com
+  imagePullSecrets:
+    - name: ecr-creds
+
+dataPipeline:
+  stateVolume:
+    storageClassName: ebs-gp3
+    size: 100Gi
+  downloader:
+    totalMaxConcurrent: 10
+    resources:
+      limits:
+        memory: 2Gi
+    env:
+      RUST_BACKTRACE: "0"
+  ingester:
+    resources:
+      limits:
+        memory: 4Gi
+    env:
+      RUST_BACKTRACE: "0"
+
+wmsApi:
+  replicaCount: 2
+  cleanup:
+    separate: true
+  resources:
+    limits:
+      memory: 16Gi
+  env:
+    RUST_BACKTRACE: "0"
+    TOKIO_WORKER_THREADS: "16"
+    TILE_CACHE_SIZE_MB: "8192"
+    TILE_CACHE_TTL_SECS: "600"
+    CACHE_WARMING_CONCURRENCY: "8"
+    MEMORY_LIMIT_MB: "28000"
+    MEMORY_PRESSURE_THRESHOLD: "0.80"
+    MEMORY_PRESSURE_TARGET: "0.70"
+    ENABLE_CITE_DATA: "false"
+
+edrApi:
+  replicaCount: 2
+  resources:
+    limits:
+      memory: 8Gi
+  env:
+    RUST_BACKTRACE: "0"
+    EDR_CHUNK_CACHE_MB: "8192"
+
+postgres:
+  storage:
+    storageClassName: ebs-gp3
+    size: 100Gi
+
+redis:
+  storage:
+    storageClassName: ebs-gp3
+    size: 100Gi
+
+minio:
+  storage:
+    storageClassName: ebs-gp3
+    size: 1Ti
+
