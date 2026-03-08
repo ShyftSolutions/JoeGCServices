@@ -12,6 +12,7 @@ pipeline {
     environment {
         SONAR_SCANNER_HOME = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
         SONAR_PROJECT_KEY = "${JOB_NAME}".replaceAll('/', '_').replaceAll(' ', '_')
+        IMAGE_NAME = "${JOB_NAME}".replaceAll('/', '-').replaceAll('%2F', '-').replaceAll(' ', '-').toLowerCase()
     }
 
     stages {
@@ -86,14 +87,14 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh 'podman build -t ${JOB_NAME}:${BUILD_NUMBER} -f web/Dockerfile web/'
+                sh 'podman build -t ${IMAGE_NAME}:${BUILD_NUMBER} -f web/Dockerfile web/'
             }
         }
 
         stage('Trivy Image Scan') {
             steps {
                 sh """
-                    podman save ${JOB_NAME}:${BUILD_NUMBER} -o image.tar
+                    podman save ${IMAGE_NAME}:${BUILD_NUMBER} -o image.tar
                     trivy image --input image.tar \
                         --severity HIGH,CRITICAL \
                         --exit-code 1 \
@@ -106,7 +107,7 @@ pipeline {
 
     post {
         always {
-            sh "podman rmi ${JOB_NAME}:${BUILD_NUMBER} || true"
+            sh "podman rmi ${IMAGE_NAME}:${BUILD_NUMBER} || true"
             cleanWs()
         }
         failure {
