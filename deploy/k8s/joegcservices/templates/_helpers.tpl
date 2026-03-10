@@ -92,13 +92,4 @@ EDR base URL.
 http://{{ .Values.global.domain }}/edr
 {{- end }}
 
-{{/*
-imagePullSecrets block for pod specs.
-Only rendered when global.imagePullSecrets is non-empty.
-*/}}
-{{- define "joegcservices.imagePullSecrets" -}}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-  {{- toYaml .Values.global.imagePullSecrets | nindent 2 }}
-{{- end }}
-{{- end }}
+

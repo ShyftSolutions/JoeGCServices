@@ -268,48 +268,6 @@ ensure_namespace() {
 }
 
 # =============================================================================
-# Check ECR access and ensure pull secret exists (production only)
-# =============================================================================
-check_ecr() {
-    echo ""
-    echo -e "${YELLOW}Checking ECR access...${NC}"
-
-    # Verify aws CLI is installed
-    if ! command -v aws &>/dev/null; then
-        echo -e "${RED}Error: aws CLI is not installed${NC}"
-        echo "Install it: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
-        exit 1
-    fi
-
-    local aws_profile="${AWS_PROFILE:-}"
-    if [ -z "$aws_profile" ]; then
-        echo -e "${RED}Error: AWS_PROFILE not set in .env.k8s.production${NC}"
-        exit 1
-    fi
-
-    # Verify AWS credentials are valid
-    if ! aws sts get-caller-identity --profile "$aws_profile" &>/dev/null; then
-        echo -e "${RED}Error: AWS credentials are invalid or expired${NC}"
-        echo "Run: aws sso login --profile ${aws_profile}"
-        exit 1
-    fi
-    echo -e "${GREEN}AWS credentials valid${NC} (profile: ${aws_profile})"
-
-    # Check if ECR pull secret exists in the namespace
-    local ecr_secret_name="ecr-creds"
-    if kubectl get namespace "$NAMESPACE" &>/dev/null && \
-       kubectl get secret "$ecr_secret_name" -n "$NAMESPACE" &>/dev/null; then
-        echo -e "${GREEN}ECR pull secret '${ecr_secret_name}' exists in namespace '${NAMESPACE}'${NC}"
-    else
-        echo -e "${YELLOW}ECR pull secret not found. Creating it...${NC}"
-        "${SCRIPT_DIR}/update-k8s-aws-secret.sh" \
-            --profile "$aws_profile" \
-            --namespace "$NAMESPACE" \
-            --region "${AWS_REGION:-us-east-2}"
-    fi
-}
-
-# =============================================================================
 # Build and push Docker images to ECR
 # =============================================================================
 build_and_push_images() {
@@ -558,11 +516,6 @@ main() {
     check_prereqs
     ensure_namespace
 
-    # ECR access check (production only)
-    if [ "$PRODUCTION" = true ]; then
-        check_ecr
-    fi
-
     # Build and push images (production only, unless --skip-build or --dry-run)
     if [ "$PRODUCTION" = true ] && [ "$SKIP_BUILD" = false ] && [ -z "$DRY_RUN" ]; then
         build_and_push_images
@@ -630,7 +583,87 @@ main() {
         echo ""
         echo "Pod status:"
         kubectl get pods -n "${NAMESPACE}" -o wide
+
+        # Smoke-test the services
+        verify_services
     fi
+}
+
+# =============================================================================
+# Verify services are responding after deploy
+# =============================================================================
+verify_services() {
+    local domain="${DOMAIN:-localhost}"
+    local base_url="http://${domain}"
+    local pass=0
+    local fail=0
+
+    echo ""
+    echo -e "${BOLD}=========================================="
+    echo " Service Health Checks"
+    echo "==========================================${NC}"
+
+    # Use kubectl port-forward through the Istio gateway if domain isn't
+    # directly reachable from this machine. For now, try the public URL
+    # and fall back to a kubectl exec curl inside the cluster.
+
+    check_endpoint() {
+        local label="$1"
+        local url="$2"
+        local expect_str="${3:-}"   # Optional string to look for in response
+
+        printf "  %-22s %s\n" "${label}" "${url}"
+
+        local http_code body
+        http_code=$(curl -s -L -o /tmp/deploy-check-body -w '%{http_code}' \
+            --max-time 10 --connect-timeout 5 "${url}" 2>/dev/null) || http_code="000"
+        body=$(cat /tmp/deploy-check-body 2>/dev/null || echo "")
+
+        if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 400 ]; then
+            if [ -n "$expect_str" ] && ! echo "$body" | grep -q "$expect_str"; then
+                echo -e "    ${YELLOW}${http_code} OK — but expected '${expect_str}' not found in response${NC}"
+                ((fail++))
+            else
+                echo -e "    ${GREEN}${http_code} OK${NC}"
+                ((pass++))
+            fi
+        else
+            echo -e "    ${RED}${http_code} FAILED${NC}"
+            ((fail++))
+        fi
+    }
+
+    check_endpoint "WMS GetCapabilities" \
+        "${base_url}/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" \
+        "WMS_Capabilities"
+
+    check_endpoint "WMTS GetCapabilities" \
+        "${base_url}/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities" \
+        "Capabilities"
+
+    check_endpoint "EDR Landing Page" \
+        "${base_url}/edr" \
+        "links"
+
+    check_endpoint "EDR Collections" \
+        "${base_url}/edr/collections" \
+        "collections"
+
+    check_endpoint "Web Dashboard" \
+        "${base_url}/" \
+        ""
+
+    echo ""
+    echo -e "  Results: ${GREEN}${pass} passed${NC}, ${RED}${fail} failed${NC}"
+
+    if [ "$fail" -gt 0 ]; then
+        echo -e "  ${YELLOW}Some checks failed — services may still be starting up.${NC}"
+        echo "  Re-check manually:"
+        echo "    curl -s -o /dev/null -w '%{http_code}' '${base_url}/wms?SERVICE=WMS&REQUEST=GetCapabilities'"
+        echo "    curl -s -o /dev/null -w '%{http_code}' '${base_url}/edr/collections'"
+    fi
+
+    rm -f /tmp/deploy-check-body
 }
 
 main

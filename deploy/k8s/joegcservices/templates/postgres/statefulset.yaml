@@ -24,6 +24,7 @@ spec:
           ports:
             - containerPort: 5432
               name: postgres
+          args: ["-c", "max_connections=500"]
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -52,7 +53,7 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - $(POSTGRES_USER)
+                - {{ .Values.secrets.postgres.user }}
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -62,7 +63,7 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - $(POSTGRES_USER)
+                - {{ .Values.secrets.postgres.user }}
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5

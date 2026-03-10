@@ -22,7 +22,6 @@ spec:
         {{- include "joegcservices.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: edr-api
     spec:
-      {{- include "joegcservices.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: edr-api
           image: {{ include "joegcservices.image" (dict "registry" .Values.global.image.registry "repository" .Values.edrApi.image.repository "tag" .Values.edrApi.image.tag) }}

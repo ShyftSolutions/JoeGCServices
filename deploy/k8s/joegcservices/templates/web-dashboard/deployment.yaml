@@ -18,7 +18,6 @@ spec:
         {{- include "joegcservices.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: web-dashboard
     spec:
-      {{- include "joegcservices.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: web-dashboard
           image: {{ include "joegcservices.image" (dict "registry" .Values.global.image.registry "repository" .Values.webDashboard.image.repository "tag" .Values.webDashboard.image.tag) }}

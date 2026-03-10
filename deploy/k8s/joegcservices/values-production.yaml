@@ -11,8 +11,6 @@ global:
   domain: wxchange.shyftwx.com
   image:
     registry: 711051230276.dkr.ecr.us-east-2.amazonaws.com
-  imagePullSecrets:
-    - name: ecr-creds
 
 dataPipeline:
   stateVolume:
@@ -28,7 +26,7 @@ dataPipeline:
   ingester:
     resources:
       limits:
-        memory: 4Gi
+        memory: 32Gi
     env:
       RUST_BACKTRACE: "0"
 
@@ -42,10 +40,11 @@ wmsApi:
   env:
     RUST_BACKTRACE: "0"
     TOKIO_WORKER_THREADS: "16"
-    TILE_CACHE_SIZE_MB: "8192"
+    DATABASE_POOL_SIZE: "20"
+    TILE_CACHE_SIZE_MB: "12288"
     TILE_CACHE_TTL_SECS: "600"
     CACHE_WARMING_CONCURRENCY: "8"
-    MEMORY_LIMIT_MB: "28000"
+    MEMORY_LIMIT_MB: "14000"
     MEMORY_PRESSURE_THRESHOLD: "0.80"
     MEMORY_PRESSURE_TARGET: "0.70"
     ENABLE_CITE_DATA: "false"
@@ -54,10 +53,10 @@ edrApi:
   replicaCount: 2
   resources:
     limits:
-      memory: 8Gi
+      memory: 20Gi
   env:
     RUST_BACKTRACE: "0"
-    EDR_CHUNK_CACHE_MB: "8192"
+    EDR_CHUNK_CACHE_MB: "16384"
 
 postgres:
   storage:

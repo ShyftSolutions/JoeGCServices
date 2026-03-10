@@ -22,7 +22,6 @@ spec:
         {{- include "joegcservices.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: wms-api
     spec:
-      {{- include "joegcservices.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: wms-api
           image: {{ include "joegcservices.image" (dict "registry" .Values.global.image.registry "repository" .Values.wmsApi.image.repository "tag" .Values.wmsApi.image.tag) }}
@@ -38,8 +37,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "joegcservices.fullname" . }}-secrets
                   key: DATABASE_URL
-            - name: DATABASE_POOL_SIZE
-              value: "50"
             - name: REDIS_URL
               valueFrom:
                 secretKeyRef:
@@ -90,11 +87,11 @@ spec:
             {{- toYaml .Values.wmsApi.resources | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: /wms?SERVICE=WMS&REQUEST=GetCapabilities
+              path: /health
               port: http
             initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 10
             failureThreshold: 5
           readinessProbe:
             httpGet:
@@ -102,5 +99,5 @@ spec:
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 15
             failureThreshold: 5

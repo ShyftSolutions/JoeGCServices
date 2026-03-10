@@ -19,7 +19,6 @@ spec:
         {{- include "joegcservices.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: data-pipeline
     spec:
-      {{- include "joegcservices.imagePullSecrets" . | nindent 6 }}
       securityContext:
         fsGroup: 1000
       containers:
