@@ -372,6 +372,54 @@ build_and_push_images() {
 }
 
 # =============================================================================
+# Refresh ECR pull secret in the target namespace
+# =============================================================================
+# ECR tokens expire every 12 hours. The cluster has a node-level script that
+# refreshes secrets periodically, but we also refresh here to ensure the token
+# is valid before deploying (avoids ImagePullBackOff on new image tags).
+refresh_ecr_pull_secret() {
+    local ecr_registry="${ECR_REGISTRY:-}"
+    local aws_profile="${AWS_PROFILE:-}"
+    local aws_region="${AWS_REGION:-us-east-2}"
+    local secret_name="ecr-registry"
+
+    if [ -z "$ecr_registry" ]; then
+        echo -e "${YELLOW}ECR_REGISTRY not set — skipping pull secret refresh${NC}"
+        return 0
+    fi
+
+    echo ""
+    echo -e "${YELLOW}Refreshing ECR pull secret (${secret_name}) in namespace ${NAMESPACE}...${NC}"
+
+    local ecr_password
+    ecr_password=$(aws ecr get-login-password --profile "$aws_profile" --region "$aws_region" 2>/dev/null) || {
+        echo -e "${RED}Error: Failed to get ECR login password${NC}"
+        echo "  Ensure AWS SSO session is valid: aws sso login --profile ${aws_profile}"
+        exit 1
+    }
+
+    # Create or update the docker-registry secret
+    kubectl create secret docker-registry "$secret_name" \
+        --docker-server="$ecr_registry" \
+        --docker-username=AWS \
+        --docker-password="$ecr_password" \
+        --namespace="$NAMESPACE" \
+        --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+
+    # Ensure the default ServiceAccount references the secret
+    local pull_secrets
+    pull_secrets=$(kubectl get serviceaccount default -n "$NAMESPACE" \
+        -o jsonpath='{.imagePullSecrets[*].name}' 2>/dev/null || echo "")
+    if [[ "$pull_secrets" != *"$secret_name"* ]]; then
+        kubectl patch serviceaccount default -n "$NAMESPACE" \
+            -p "{\"imagePullSecrets\": [{\"name\": \"${secret_name}\"}]}" >/dev/null
+        echo -e "  ${GREEN}Patched default ServiceAccount with ${secret_name}${NC}"
+    fi
+
+    echo -e "  ${GREEN}ECR pull secret refreshed${NC}"
+}
+
+# =============================================================================
 # Uninstall the release
 # =============================================================================
 do_uninstall() {
@@ -526,6 +574,11 @@ main() {
             echo ""
             echo -e "${YELLOW}Skipping build. Using image tag: ${IMAGE_TAG}${NC}"
         fi
+    fi
+
+    # Refresh ECR pull secret (production only, unless --dry-run)
+    if [ "$PRODUCTION" = true ] && [ -z "$DRY_RUN" ]; then
+        refresh_ecr_pull_secret
     fi
 
     # Lint first
