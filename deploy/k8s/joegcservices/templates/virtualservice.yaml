@@ -46,9 +46,23 @@ spec:
             port:
               number: 8083
     # Downloader status/admin
+    # The downloader serves routes at / (not /downloader/), so strip the prefix.
+    # Two rules needed: prefix /downloader/ for sub-paths, exact /downloader for root.
     - match:
         - uri:
-            prefix: /downloader
+            prefix: /downloader/
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: {{ include "joegcservices.fullname" . }}-data-pipeline-downloader
+            port:
+              number: 8081
+    - match:
+        - uri:
+            exact: /downloader
+      rewrite:
+        uri: /
       route:
         - destination:
             host: {{ include "joegcservices.fullname" . }}-data-pipeline-downloader
