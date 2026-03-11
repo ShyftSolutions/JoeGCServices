@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DART Pipeline - From Ocean Floor to API</title>
+    <link rel="icon" href="https://shyftsolutions.io/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --border: #334155;
+            --accent-red: #ef4444;
+            --accent-cyan: #22d3ee;
+            --accent-orange: #f97316;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e1b4b 100%);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo svg {
+            height: 2rem;
+            width: auto;
+        }
+
+        .logo svg .logo-dark {
+            fill: #f1f5f9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 2.5rem 1.5rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(79, 70, 229, 0.1) 100%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.75rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Map */
+        .map-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .map-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .map-subtitle {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .map {
+            height: 400px;
+            width: 100%;
+        }
+
+        /* Architecture Diagram */
+        .arch-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            min-width: 900px;
+        }
+
+        .arch-node {
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .arch-box {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            background: var(--bg-dark);
+            min-width: 130px;
+            transition: border-color 0.2s;
+        }
+
+        .arch-box:hover {
+            border-color: var(--primary-light);
+        }
+
+        .arch-box.source { border-color: var(--accent-cyan); }
+        .arch-box.service { border-color: var(--primary-light); }
+        .arch-box.storage { border-color: var(--success); }
+        .arch-box.api { border-color: var(--accent-orange); }
+
+        .arch-box-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-box-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-box-tech {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .arch-arrow {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            padding: 0 0.5rem;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .arch-arrow-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Code block */
+        .code-block {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: var(--text-muted);
+        }
+
+        .code-block .comment { color: #6b7280; }
+        .code-block .key { color: var(--accent-cyan); }
+        .code-block .value { color: var(--success); }
+        .code-block .number { color: var(--accent-orange); }
+
+        code {
+            background: var(--bg-dark);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        /* Mode badges */
+        .mode-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .mode-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .mode-badge.standard {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+
+        .mode-badge.event {
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            color: var(--accent-orange);
+        }
+
+        .mode-badge.triggered {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+
+        .mode-badge code {
+            font-size: 0.8rem;
+        }
+
+        /* Pipeline steps */
+        .pipeline-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .step-detail {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .step-detail code {
+            font-size: 0.75rem;
+        }
+
+        /* Try it section */
+        .try-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .try-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, border-color 0.2s;
+            display: block;
+        }
+
+        .try-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .try-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .try-card-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .try-card-endpoint {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: var(--primary-light);
+            background: var(--bg-dark);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .method-badge {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        /* Endpoint list */
+        .endpoint-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .endpoint-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .endpoint-item:last-child {
+            border-bottom: none;
+        }
+
+        .endpoint-method {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: monospace;
+            flex-shrink: 0;
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+        }
+
+        .endpoint-desc {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .endpoint-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .endpoint-btn {
+            background: var(--bg-dark);
+            color: var(--primary-light);
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+
+        .endpoint-btn:hover {
+            border-color: var(--primary-light);
+        }
+
+        /* Two-col layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-text a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-diagram {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .map {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pipeline-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .try-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Leaflet popup overrides for dark theme */
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card);
+            color: var(--text);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .leaflet-popup-tip {
+            background: var(--bg-card);
+        }
+
+        .leaflet-popup-content {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .leaflet-popup-content strong {
+            color: var(--accent-cyan);
+        }
+
+        .leaflet-popup-content a {
+            color: var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <svg viewBox="0 0 464.7 87" xmlns="http://www.w3.org/2000/svg"><g data-name="Layer 2"><g data-name="Layer 1"><path class="logo-dark" d="M71.9,18H26.3a5.6,5.6,0,0,0-4.9,2.4,9.2,9.2,0,0,0-.1,10.7,6,6,0,0,0,5,2.2H53.2c7.2,0,12.9,2.7,17.1,8.2s5.8,10.9,5.8,18-1.9,13.1-5.7,18a21.6,21.6,0,0,1-17.2,8.2H4.2V67.5H50.1a5.6,5.6,0,0,0,4.7-2.6,8.9,8.9,0,0,0,1.6-5.5,8.3,8.3,0,0,0-1.6-5.3,5.5,5.5,0,0,0-4.7-2.2h-27c-7.3,0-13-2.7-17.3-8.1S0,32.9,0,25.9s1.9-13,5.7-17.8A22.1,22.1,0,0,1,23.1,0H71.9Z"/><path fill="#329af0" d="M71.7,0h48.7q10.9,0,17.4,8.1c3.8,4.8,5.7,10.8,5.7,17.8s-1.9,13-5.8,17.9a21.8,21.8,0,0,1-17.3,8.1H93.6a5.5,5.5,0,0,0-4.8,2.2,8.3,8.3,0,0,0-1.6,5.3,8.9,8.9,0,0,0,1.6,5.5,5.8,5.8,0,0,0,4.8,2.6h45.7V85.7H90.5c-7.3,0-13.1-2.7-17.3-8.2s-5.6-10.9-5.6-18,1.9-13.1,5.7-18a21.5,21.5,0,0,1,17.2-8.2h26.8a5.8,5.8,0,0,0,4.9-2.2,7.9,7.9,0,0,0,1.8-5.3,8.6,8.6,0,0,0-1.8-5.4,5.9,5.9,0,0,0-4.9-2.4H71.7Z"/><path fill="#329af0" d="M184.3,57.7H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.6,2.6,0,0,0,2,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H156.1V78.3h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,12.8,12.8,0,0,1,0-14.9,8.8,8.8,0,0,1,7.2-3.4h20.4Z"/><path fill="#329af0" d="M212.3,85.9H200.6a11.3,11.3,0,0,1-9.9-5.5,21.4,21.4,0,0,1-3.3-12.1,23,23,0,0,1,3.3-12.5q3.8-5.7,9.9-5.7h11.7c4.1,0,7.4,1.9,9.8,5.7a22.8,22.8,0,0,1,3.4,12.5,21.4,21.4,0,0,1-3.3,12.1A11.3,11.3,0,0,1,212.3,85.9Zm-1.4-7.8c1.9,0,3.4-1.1,4.6-3.3a14.8,14.8,0,0,0,1.5-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-1.9,0-3.4,1-4.5,3.1a13.4,13.4,0,0,0-1.6,6.8,16.1,16.1,0,0,0,1.6,7.2q1.7,3.3,4.5,3.3Z"/><path fill="#329af0" d="M257.9,85.9H243.6c-4.5,0-8.1-1.2-10.7-3.5a13.3,13.3,0,0,1-4.4-7.2,24.4,24.4,0,0,1-.9-6.6v-1a1.7,1.7,0,0,0,.1-.7V50.1h7.9V66.9a14.3,14.3,0,0,0,1.9,7.6,7,7,0,0,0,6.1,3.6h14.3Z"/><path fill="#329af0" d="M291.2,72.6a11.9,11.9,0,0,1-4.8,9.9,17,17,0,0,1-10.6,3.4,15.6,15.6,0,0,1-10.2-3.3,11.9,11.9,0,0,1-4.7-10V50.1h7.8V71.4a5.4,5.4,0,0,0,2.4,4.5,9.1,9.1,0,0,0,5.3,1.5,8.9,8.9,0,0,0,5-1.5,5.3,5.3,0,0,0,2.3-4.5V50.1h7.5Z"/><path fill="#329af0" d="M317.3,57.7h-8.1V85.9h-7.8V57.7h-8V50.1h23.9Z"/><path fill="#329af0" d="M327.6,85.9h-7.9V50.1h7.9Z"/><path fill="#329af0" d="M354.2,85.9H342.6a11.9,11.9,0,0,1-10-5.5,22.2,22.2,0,0,1-3.2-12.1,23,23,0,0,1,3.3-12.5q3.6-5.7,9.9-5.7h11.6c4.2,0,7.4,1.9,9.9,5.7a23,23,0,0,1,3.3,12.5,22.2,22.2,0,0,1-3.2,12.1A11.3,11.3,0,0,1,354.2,85.9Zm-1.3-7.8q2.9,0,4.5-3.3a14.9,14.9,0,0,0,1.6-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-2,0-3.5,1-4.6,3.1a13.3,13.3,0,0,0-1.5,6.8,14.8,14.8,0,0,0,1.5,7.2c1.2,2.2,2.7,3.3,4.6,3.3Z"/><path fill="#329af0" d="M405.7,78.7a6.9,6.9,0,0,1-2.8,5.6,9.6,9.6,0,0,1-6.3,2.1,10.6,10.6,0,0,1-5.7-1.7,9.7,9.7,0,0,1-3.9-5.4c-.2-.4-.9-2.9-2.2-7.6a85.1,85.1,0,0,0-3-9.8c-1.1-3.2-2.1-4.8-2.9-4.7a2.3,2.3,0,0,0-1,.7,2,2,0,0,0-.3,1.1V85.9h-7.9V57.2a7,7,0,0,1,2.9-6,11.2,11.2,0,0,1,6.6-1.8q5.3,0,8.4,5.4c1.4,2.4,2.8,6.2,4,11.6a81.6,81.6,0,0,0,3.1,10.9,2.7,2.7,0,0,0,.7.8,1.7,1.7,0,0,0,1,.3,1.2,1.2,0,0,0,1-.5,1.7,1.7,0,0,0,.4-1.2V49.9h7.9Z"/><path fill="#329af0" d="M439.1,57.7h-19a2.5,2.5,0,0,0-2,.9,4,4,0,0,0-.8,2.3,3.4,3.4,0,0,0,.7,2.2,2.8,2.8,0,0,0,2.1,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H410.9V78.3H430a2.3,2.3,0,0,0,2-1.1,3.9,3.9,0,0,0,.7-2.3,4.4,4.4,0,0,0-.7-2.2,2.5,2.5,0,0,0-2-.9H418.8a8.8,8.8,0,0,1-7.2-3.4,11.1,11.1,0,0,1-2.5-7.4,11.3,11.3,0,0,1,2.4-7.5,9.1,9.1,0,0,1,7.3-3.4h20.3Z"/><path class="logo-dark" d="M184.3,7.6H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.5,2.5,0,0,0,2,.9h11.2a8.8,8.8,0,0,1,7.2,3.4,12,12,0,0,1,2.4,7.5,12.3,12.3,0,0,1-2.4,7.6,8.8,8.8,0,0,1-7.2,3.4H156.1V28.2h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,11.3,11.3,0,0,1-2.4-7.5,11.5,11.5,0,0,1,2.4-7.4A8.8,8.8,0,0,1,163.9,0h20.4Z"/><path class="logo-dark" d="M219,35.8h-7.9V21.7H196.8V35.8h-7.9V0h7.9V13.9h14.3V0H219Z"/><path class="logo-dark" d="M258.5.2,244,22.6V35.7h-7.9V22.6L221.7.2h9.2l8.6,13.1a.6.6,0,0,0,.6.5,1,1,0,0,0,.8-.5L249.3.2Z"/><path class="logo-dark" d="M288.1,21.7H265.9V35.8H258V17.6a30,30,0,0,1,1-8.5,12.7,12.7,0,0,1,3.8-6.5A11.1,11.1,0,0,1,270.6.1h17.5V7.6H270.6a3.7,3.7,0,0,0-3.3,1.6,5.6,5.6,0,0,0-1.2,3.1c-.1.6-.1,1.1-.2,1.7h22.2Z"/><path class="logo-dark" d="M314.2,7.6h-8.1V35.8h-7.8V7.6h-8.1V.1h24Z"/><text class="logo-dark" font-family="NasalizationRg-Regular, Nasalization" font-size="10.92px" transform="translate(444.6 85.9)">LLC</text></g></g></svg>
+            </a>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Portal</a>
+                <a href="#source" class="nav-link">Source</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#pipeline" class="nav-link">Pipeline</a>
+                <a href="#edr" class="nav-link">EDR API</a>
+                <a href="#try-it" class="nav-link">Try It</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>DART Tsunami Buoy <span>Pipeline</span></h1>
+            <p class="hero-tagline">
+                From ocean floor pressure sensors to OGC-compliant API &mdash; how a single observation traverses 4 services in under a second.
+            </p>
+        </div>
+    </section>
+
+    <main class="main">
+
+        <!-- 1. The Source -->
+        <section class="section" id="source">
+            <h2 class="section-title">
+                <span class="icon">&#127759;</span>
+                The Source
+            </h2>
+            <p class="section-subtitle">
+                DART (Deep-ocean Assessment and Reporting of Tsunamis) buoys are bottom pressure recorders deployed on the ocean floor at depths of 1,000&ndash;6,000m. Maintained by NOAA's PMEL, ~60 stations span the Pacific, Atlantic, Indian, and Caribbean basins.
+            </p>
+
+            <div class="two-col">
+                <div>
+                    <div class="info-box" style="margin-bottom: 1.5rem;">
+                        <div class="card-header">
+                            <span class="card-icon">&#128225;</span>
+                            <span class="card-title">What They Measure</span>
+                        </div>
+                        <p class="card-description">
+                            Each buoy measures <strong style="color: var(--accent-cyan);">water column height</strong> &mdash; the total pressure of the ocean above the sensor, converted to meters. During normal conditions, readings arrive every 15 minutes. When a seismic event is detected, the reporting frequency increases up to 900x.
+                        </p>
+                        <div class="mode-badges">
+                            <div class="mode-badge standard">
+                                <code>T=1</code> Standard &mdash; 15 min
+                            </div>
+                            <div class="mode-badge event">
+                                <code>T=2</code> Event &mdash; 1 min
+                            </div>
+                            <div class="mode-badge triggered">
+                                <code>T=3</code> Triggered &mdash; 15 sec
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="card-header">
+                            <span class="card-icon">&#128196;</span>
+                            <span class="card-title">Raw Data Format</span>
+                        </div>
+                        <p class="card-description" style="margin-bottom: 0.75rem;">
+                            Each station's data is a space-delimited text file hosted at NDBC. The file contains ~45 days of history.
+                        </p>
+                        <div class="code-block"><span class="comment"># Source: ndbc.noaa.gov/data/realtime2/21413.dart</span>
+<span class="comment">#YY  MM DD hh mm ss T   HEIGHT</span>
+<span class="comment">#yr  mo dy hr mn  s -        m</span>
+<span class="number">2026</span> <span class="number">03</span> <span class="number">10</span> <span class="number">06</span> <span class="number">00</span> <span class="number">00</span> <span class="value">1</span> <span class="key">4265.970</span>
+<span class="number">2026</span> <span class="number">03</span> <span class="number">10</span> <span class="number">05</span> <span class="number">45</span> <span class="number">00</span> <span class="value">1</span> <span class="key">4265.950</span>
+<span class="number">2026</span> <span class="number">03</span> <span class="number">10</span> <span class="number">05</span> <span class="number">30</span> <span class="number">00</span> <span class="value">1</span> <span class="key">4265.942</span></div>
+                        <p class="card-description" style="margin-top: 0.75rem;">
+                            <a href="https://www.ndbc.noaa.gov/data/realtime2/21413.dart" target="_blank" class="card-link">View raw file for station 21413</a>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="map-container">
+                        <div class="map-header">
+                            <span class="map-title">Active DART Stations</span>
+                            <span class="map-subtitle" id="station-count">Loading...</span>
+                        </div>
+                        <div id="map-stations" class="map"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Architecture -->
+        <section class="section" id="architecture">
+            <h2 class="section-title">
+                <span class="icon">&#128736;</span>
+                Architecture
+            </h2>
+            <p class="section-subtitle">
+                DART data flows through 4 services. Unlike gridded model data (GRIB2/NetCDF), point observations bypass object storage entirely &mdash; raw text is parsed, transformed to JSON, and written directly to PostgreSQL.
+            </p>
+
+            <div class="arch-diagram">
+                <div class="arch-flow">
+                    <div class="arch-node">
+                        <div class="arch-box source">
+                            <div class="arch-box-icon">&#127759;</div>
+                            <div class="arch-box-title">NOAA NDBC</div>
+                            <div class="arch-box-tech">ndbc.noaa.gov</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-arrow">
+                        <span class="arch-arrow-label">HTTP GET</span>
+                        &#10145;
+                        <span class="arch-arrow-label">every 15 min</span>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="arch-box service">
+                            <div class="arch-box-icon">&#128229;</div>
+                            <div class="arch-box-title">Downloader</div>
+                            <div class="arch-box-tech">Rust / Axum / Tokio</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-arrow">
+                        <span class="arch-arrow-label">POST JSON</span>
+                        &#10145;
+                        <span class="arch-arrow-label">batches of 500</span>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="arch-box service">
+                            <div class="arch-box-icon">&#9881;</div>
+                            <div class="arch-box-title">Ingester</div>
+                            <div class="arch-box-tech">Rust / Axum</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-arrow">
+                        <span class="arch-arrow-label">SQL INSERT</span>
+                        &#10145;
+                        <span class="arch-arrow-label">ON CONFLICT dedup</span>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="arch-box storage">
+                            <div class="arch-box-icon">&#128451;</div>
+                            <div class="arch-box-title">PostgreSQL</div>
+                            <div class="arch-box-tech">PostGIS / GIST index</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-arrow">
+                        <span class="arch-arrow-label">SQL SELECT</span>
+                        &#10145;
+                        <span class="arch-arrow-label">ST_DWithin()</span>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="arch-box api">
+                            <div class="arch-box-icon">&#128200;</div>
+                            <div class="arch-box-title">EDR API</div>
+                            <div class="arch-box-tech">OGC EDR 1.1 / GeoJSON</div>
+                        </div>
+                    </div>
+
+                    <div class="arch-arrow">
+                        <span class="arch-arrow-label">HTTP GET</span>
+                        &#10145;
+                        <span class="arch-arrow-label">GeoJSON response</span>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="arch-box source">
+                            <div class="arch-box-icon">&#128187;</div>
+                            <div class="arch-box-title">Client</div>
+                            <div class="arch-box-tech">Browser / App</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Pipeline Details -->
+        <section class="section" id="pipeline">
+            <h2 class="section-title">
+                <span class="icon">&#9881;</span>
+                Pipeline Details
+            </h2>
+
+            <div class="pipeline-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Discover Stations</div>
+                    <p class="step-detail">
+                        The downloader fetches <code>activestations.xml</code> from NDBC and filters for stations with <code>type="dart"</code>. This yields ~60 active buoys with their coordinates and names.
+                    </p>
+                    <p class="step-detail" style="margin-top: 0.5rem;">
+                        <a href="https://www.ndbc.noaa.gov/activestations.xml" target="_blank" class="card-link" style="font-size: 0.8rem;">View station registry</a>
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Fetch Data</div>
+                    <p class="step-detail">
+                        Each station's <code>.dart</code> file is fetched via HTTP GET, 10 stations concurrently using <code>buffer_unordered(10)</code>. Each file is ~60&ndash;130 KB containing ~45 days of readings.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Parse &amp; Transform</div>
+                    <p class="step-detail">
+                        Raw text lines are split by whitespace. Date fields are combined into RFC 3339 timestamps. The measurement type (<code>T=1/2/3</code>) and height are extracted into structured <code>IngestObservation</code> objects.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-title">POST to Ingester</div>
+                    <p class="step-detail">
+                        Observations are batched (500 per request) and POSTed as JSON to the ingester's <code>/ingest/observations</code> endpoint with <code>source: "dart"</code>.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Upsert Locations</div>
+                    <p class="step-detail">
+                        The ingester creates/updates entries in the <code>locations</code> table using PostGIS <code>ST_MakePoint()</code>. A GIST spatial index enables fast geographic queries.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Store Observations</div>
+                    <p class="step-detail">
+                        Observations are inserted into PostgreSQL with a unique constraint on <code>(location_id, source, obs_time)</code>. Since the full 45-day history is re-fetched every 15 minutes, <code>ON CONFLICT DO NOTHING</code> deduplicates automatically.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Configure EDR</div>
+                    <p class="step-detail">
+                        A YAML config registers the <code>dart</code> collection with <code>data_type: pointobservation</code>. This tells the EDR API to query PostgreSQL (not MinIO) and to filter by <code>source='dart'</code>. A 12-hour recency window controls which stations appear as "active".
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Serve via EDR</div>
+                    <p class="step-detail">
+                        The EDR API exposes 4 OGC-compliant query types: <code>locations</code>, <code>locations/{id}</code>, <code>radius</code>, and <code>area</code>. Responses are GeoJSON with <code>water_column_height_m</code> as the primary parameter.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EDR API -->
+        <section class="section" id="edr">
+            <h2 class="section-title">
+                <span class="icon">&#128200;</span>
+                EDR API Endpoints
+            </h2>
+            <p class="section-subtitle">
+                The DART collection is exposed through 4 OGC Environmental Data Retrieval query types. All responses are GeoJSON (<code>application/geo+json</code>).
+            </p>
+
+            <div class="endpoint-list" style="margin-bottom: 1.5rem;">
+                <div class="endpoint-item">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                        <span class="endpoint-method">GET</span>
+                        <span class="endpoint-path">/edr/collections/dart/locations</span>
+                        <span class="endpoint-desc">&mdash; List all active stations (within 12h recency)</span>
+                    </div>
+                    <div class="endpoint-actions">
+                        <a href="/edr/collections/dart/locations" target="_blank" class="endpoint-btn">Try it</a>
+                    </div>
+                </div>
+                <div class="endpoint-item">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                        <span class="endpoint-method">GET</span>
+                        <span class="endpoint-path">/edr/collections/dart/locations/{id}</span>
+                        <span class="endpoint-desc">&mdash; Time series for a specific station</span>
+                    </div>
+                    <div class="endpoint-actions">
+                        <a href="/edr/collections/dart/locations/21413" target="_blank" class="endpoint-btn">Try it</a>
+                    </div>
+                </div>
+                <div class="endpoint-item">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                        <span class="endpoint-method">GET</span>
+                        <span class="endpoint-path">/edr/collections/dart/radius</span>
+                        <span class="endpoint-desc">&mdash; Stations within a radius of a point</span>
+                    </div>
+                    <div class="endpoint-actions">
+                        <a href="/edr/collections/dart/radius?coords=POINT(-157 20)&within=2000&within-units=km" target="_blank" class="endpoint-btn">Try it</a>
+                    </div>
+                </div>
+                <div class="endpoint-item">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                        <span class="endpoint-method">GET</span>
+                        <span class="endpoint-path">/edr/collections/dart/radius</span>
+                        <span class="endpoint-desc">&mdash; Near Japan (3,000 km radius)</span>
+                    </div>
+                    <div class="endpoint-actions">
+                        <a href="/edr/collections/dart/radius?coords=POINT(145 35)&within=3000&within-units=km" target="_blank" class="endpoint-btn">Try it</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="info-box">
+                    <div class="card-header">
+                        <span class="card-icon">&#128196;</span>
+                        <span class="card-title">Example Response</span>
+                    </div>
+                    <div class="code-block"><span class="comment">// GET /edr/collections/dart/locations/21413</span>
+{
+  <span class="key">"type"</span>: <span class="value">"FeatureCollection"</span>,
+  <span class="key">"features"</span>: [{
+    <span class="key">"type"</span>: <span class="value">"Feature"</span>,
+    <span class="key">"id"</span>: <span class="value">"21413:2026-03-10T06:00:00Z"</span>,
+    <span class="key">"geometry"</span>: {
+      <span class="key">"type"</span>: <span class="value">"Point"</span>,
+      <span class="key">"coordinates"</span>: [<span class="number">-152.117</span>, <span class="number">30.515</span>]
+    },
+    <span class="key">"properties"</span>: {
+      <span class="key">"location_id"</span>: <span class="value">"21413"</span>,
+      <span class="key">"name"</span>: <span class="value">"NW PACIFIC"</span>,
+      <span class="key">"obs_time"</span>: <span class="value">"2026-03-10T06:00:00Z"</span>,
+      <span class="key">"water_column_height_m"</span>: <span class="number">4265.970</span>,
+      <span class="key">"raw_text"</span>: <span class="value">"T=1 HEIGHT=4265.970"</span>
+    }
+  }]
+}</div>
+                </div>
+                <div>
+                    <div class="map-container">
+                        <div class="map-header">
+                            <span class="map-title">Radius Query: 2000km from Hawaii</span>
+                            <span class="map-subtitle" id="radius-count">Loading...</span>
+                        </div>
+                        <div id="map-radius" class="map"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Try It -->
+        <section class="section" id="try-it">
+            <h2 class="section-title">
+                <span class="icon">&#128640;</span>
+                Try It Live
+            </h2>
+            <p class="section-subtitle">
+                Click any card to hit the live API and see real DART data.
+            </p>
+
+            <div class="try-grid">
+                <a href="/edr/collections/dart/locations" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge">GET</span>
+                        List All Active Stations
+                    </div>
+                    <p class="try-card-desc">
+                        Returns a GeoJSON FeatureCollection of all DART stations that have reported data in the last 12 hours.
+                    </p>
+                    <code class="try-card-endpoint">/edr/collections/dart/locations</code>
+                </a>
+
+                <a href="/edr/collections/dart/locations/21413" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge">GET</span>
+                        Station 21413 Time Series
+                    </div>
+                    <p class="try-card-desc">
+                        Water column height readings from buoy 21413 (700 NM ESE of Tokyo) &mdash; one of the original stations from the 2004 Indian Ocean tsunami detection network.
+                    </p>
+                    <code class="try-card-endpoint">/edr/collections/dart/locations/21413</code>
+                </a>
+
+                <a href="/edr/collections/dart/radius?coords=POINT(-157 20)&within=2000&within-units=km" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge">GET</span>
+                        Radius Query &mdash; Near Hawaii
+                    </div>
+                    <p class="try-card-desc">
+                        Find all DART buoys within 2,000 km of Hawaii using PostGIS <code>ST_DWithin()</code> geodesic distance.
+                    </p>
+                    <code class="try-card-endpoint">/edr/collections/dart/radius?coords=POINT(-157 20)&within=2000&within-units=km</code>
+                </a>
+
+                <a href="/edr/collections/dart/radius?coords=POINT(145 35)&within=3000&within-units=km" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge">GET</span>
+                        Radius Query &mdash; Near Japan
+                    </div>
+                    <p class="try-card-desc">
+                        All DART buoys within 3,000 km of Japan &mdash; the region with the densest tsunami detection network following the 2011 Tohoku earthquake.
+                    </p>
+                    <code class="try-card-endpoint">/edr/collections/dart/radius?coords=POINT(145 35)&within=3000&within-units=km</code>
+                </a>
+
+                <a href="/edr/collections/dart" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge">GET</span>
+                        Collection Metadata
+                    </div>
+                    <p class="try-card-desc">
+                        The OGC EDR collection description including available parameters, CRS, query types, and data extent.
+                    </p>
+                    <code class="try-card-endpoint">/edr/collections/dart</code>
+                </a>
+
+                <a href="https://www.ndbc.noaa.gov/data/realtime2/21413.dart" target="_blank" class="try-card">
+                    <div class="try-card-title">
+                        <span class="method-badge" style="background: rgba(34, 211, 238, 0.2); color: var(--accent-cyan);">EXT</span>
+                        Raw NDBC Source File
+                    </div>
+                    <p class="try-card-desc">
+                        The original space-delimited text file from NOAA that our downloader fetches and parses. Compare this to the structured GeoJSON our API returns.
+                    </p>
+                    <code class="try-card-endpoint">ndbc.noaa.gov/data/realtime2/21413.dart</code>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">
+            <a href="/">Back to Developer Portal</a> &mdash; Data from NOAA NDBC/PMEL. Built with Rust.
+        </p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+        const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>';
+
+        // Map 1: All DART stations
+        const mapStations = L.map('map-stations', { scrollWheelZoom: false }).setView([15, -170], 2);
+        L.tileLayer(DARK_TILES, { attribution: TILE_ATTR, maxZoom: 12 }).addTo(mapStations);
+
+        fetch('/edr/collections/dart/locations')
+            .then(r => r.json())
+            .then(data => {
+                const features = data.features || [];
+                // Deduplicate by location_id (API may return multiple obs per station)
+                const seen = new Map();
+                features.forEach(f => {
+                    const lid = (f.properties || {}).location_id || f.id;
+                    if (!seen.has(lid)) seen.set(lid, f);
+                });
+                const stations = Array.from(seen.values());
+                document.getElementById('station-count').textContent = stations.length + ' stations';
+
+                stations.forEach(f => {
+                    const coords = f.geometry.coordinates;
+                    const props = f.properties || {};
+                    const name = props.name || props.location_id || '';
+                    const lid = props.location_id || '';
+                    const height = props.water_column_height_m;
+                    const marker = L.circleMarker([coords[1], coords[0]], {
+                        radius: 6,
+                        color: '#22d3ee',
+                        fillColor: '#22d3ee',
+                        fillOpacity: 0.7,
+                        weight: 1
+                    }).addTo(mapStations);
+                    let popup = '<strong>' + lid + '</strong>';
+                    if (name && name !== lid) popup += ' &mdash; ' + name;
+                    if (height !== undefined && height !== null) popup += '<br>Depth: ' + height.toFixed(1) + ' m';
+                    popup += '<br><a href="/edr/collections/dart/locations/' + lid + '" target="_blank">View time series</a>';
+                    marker.bindPopup(popup);
+                });
+            })
+            .catch(() => {
+                document.getElementById('station-count').textContent = 'Failed to load';
+            });
+
+        // Map 2: Radius query near Hawaii
+        const mapRadius = L.map('map-radius', { scrollWheelZoom: false }).setView([20, -157], 3);
+        L.tileLayer(DARK_TILES, { attribution: TILE_ATTR, maxZoom: 12 }).addTo(mapRadius);
+
+        // Draw the query point and radius circle
+        const hawaiiPoint = [20, -157];
+        L.circleMarker(hawaiiPoint, { radius: 8, color: '#f97316', fillColor: '#f97316', fillOpacity: 0.9, weight: 2 })
+            .addTo(mapRadius)
+            .bindPopup('<strong>Query Center</strong><br>POINT(-157 20)<br>within=2000km');
+        L.circle(hawaiiPoint, { radius: 2000000, color: '#f97316', fillColor: '#f97316', fillOpacity: 0.05, weight: 1, dashArray: '6 4' })
+            .addTo(mapRadius);
+
+        fetch('/edr/collections/dart/radius?coords=POINT(-157 20)&within=2000&within-units=km')
+            .then(r => r.json())
+            .then(data => {
+                const features = data.features || [];
+                const seen = new Map();
+                features.forEach(f => {
+                    const lid = (f.properties || {}).location_id || f.id;
+                    if (!seen.has(lid)) seen.set(lid, f);
+                });
+                const stations = Array.from(seen.values());
+                document.getElementById('radius-count').textContent = stations.length + ' stations found';
+
+                stations.forEach(f => {
+                    const coords = f.geometry.coordinates;
+                    const props = f.properties || {};
+                    const lid = props.location_id || '';
+                    const marker = L.circleMarker([coords[1], coords[0]], {
+                        radius: 6,
+                        color: '#22c55e',
+                        fillColor: '#22c55e',
+                        fillOpacity: 0.8,
+                        weight: 1
+                    }).addTo(mapRadius);
+                    marker.bindPopup('<strong>' + lid + '</strong><br><a href="/edr/collections/dart/locations/' + lid + '" target="_blank">View data</a>');
+                });
+            })
+            .catch(() => {
+                document.getElementById('radius-count').textContent = 'Failed to load';
+            });
+    </script>
+</body>
+</html>
