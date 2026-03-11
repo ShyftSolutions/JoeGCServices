@@ -6,7 +6,7 @@ model:
   id: nldas-noah
   name: "NLDAS-2 Noah Land Surface Model"
   description: "North American Land Data Assimilation System - Noah 0.125 hourly"
-  enabled: true
+  enabled: false  # Requires Earthdata credentials (not yet configured)
 
 dimensions:
   type: observation

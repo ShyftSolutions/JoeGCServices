@@ -17,7 +17,7 @@ dataPipeline:
     storageClassName: ebs-gp3
     size: 100Gi
   downloader:
-    totalMaxConcurrent: 10
+    totalMaxConcurrent: 25
     resources:
       limits:
         memory: 2Gi

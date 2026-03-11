@@ -6,7 +6,7 @@ model:
   id: nldas-forcing
   name: "NLDAS-2 Forcing"
   description: "North American Land Data Assimilation System - Forcing 0.125 hourly"
-  enabled: true
+  enabled: false  # Requires Earthdata credentials (not yet configured)
 
 dimensions:
   type: observation
