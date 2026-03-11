@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FolkWeather - Weather for Everyone</title>
+    <title>ShyftWx - Weather for Everyone</title>
     <style>
         * {
             margin: 0;
@@ -61,17 +61,14 @@
             color: var(--text);
         }
 
-        .logo-icon {
-            font-size: 2rem;
+        .logo svg {
+            height: 2rem;
+            width: auto;
         }
 
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Override dark fills in SVG logo for visibility on dark background */
+        .logo svg .logo-dark {
+            fill: #f1f5f9;
         }
 
         .nav-links {
@@ -638,14 +635,13 @@
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo">
-                <span class="logo-icon">&#9729;</span>
-                <span class="logo-text">FolkWeather</span>
+                <svg viewBox="0 0 464.7 87" xmlns="http://www.w3.org/2000/svg"><g data-name="Layer 2"><g data-name="Layer 1"><path class="logo-dark" d="M71.9,18H26.3a5.6,5.6,0,0,0-4.9,2.4,9.2,9.2,0,0,0-.1,10.7,6,6,0,0,0,5,2.2H53.2c7.2,0,12.9,2.7,17.1,8.2s5.8,10.9,5.8,18-1.9,13.1-5.7,18a21.6,21.6,0,0,1-17.2,8.2H4.2V67.5H50.1a5.6,5.6,0,0,0,4.7-2.6,8.9,8.9,0,0,0,1.6-5.5,8.3,8.3,0,0,0-1.6-5.3,5.5,5.5,0,0,0-4.7-2.2h-27c-7.3,0-13-2.7-17.3-8.1S0,32.9,0,25.9s1.9-13,5.7-17.8A22.1,22.1,0,0,1,23.1,0H71.9Z"/><path fill="#329af0" d="M71.7,0h48.7q10.9,0,17.4,8.1c3.8,4.8,5.7,10.8,5.7,17.8s-1.9,13-5.8,17.9a21.8,21.8,0,0,1-17.3,8.1H93.6a5.5,5.5,0,0,0-4.8,2.2,8.3,8.3,0,0,0-1.6,5.3,8.9,8.9,0,0,0,1.6,5.5,5.8,5.8,0,0,0,4.8,2.6h45.7V85.7H90.5c-7.3,0-13.1-2.7-17.3-8.2s-5.6-10.9-5.6-18,1.9-13.1,5.7-18a21.5,21.5,0,0,1,17.2-8.2h26.8a5.8,5.8,0,0,0,4.9-2.2,7.9,7.9,0,0,0,1.8-5.3,8.6,8.6,0,0,0-1.8-5.4,5.9,5.9,0,0,0-4.9-2.4H71.7Z"/><path fill="#329af0" d="M184.3,57.7H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.6,2.6,0,0,0,2,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H156.1V78.3h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,12.8,12.8,0,0,1,0-14.9,8.8,8.8,0,0,1,7.2-3.4h20.4Z"/><path fill="#329af0" d="M212.3,85.9H200.6a11.3,11.3,0,0,1-9.9-5.5,21.4,21.4,0,0,1-3.3-12.1,23,23,0,0,1,3.3-12.5q3.8-5.7,9.9-5.7h11.7c4.1,0,7.4,1.9,9.8,5.7a22.8,22.8,0,0,1,3.4,12.5,21.4,21.4,0,0,1-3.3,12.1A11.3,11.3,0,0,1,212.3,85.9Zm-1.4-7.8c1.9,0,3.4-1.1,4.6-3.3a14.8,14.8,0,0,0,1.5-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-1.9,0-3.4,1-4.5,3.1a13.4,13.4,0,0,0-1.6,6.8,16.1,16.1,0,0,0,1.6,7.2q1.7,3.3,4.5,3.3Z"/><path fill="#329af0" d="M257.9,85.9H243.6c-4.5,0-8.1-1.2-10.7-3.5a13.3,13.3,0,0,1-4.4-7.2,24.4,24.4,0,0,1-.9-6.6v-1a1.7,1.7,0,0,0,.1-.7V50.1h7.9V66.9a14.3,14.3,0,0,0,1.9,7.6,7,7,0,0,0,6.1,3.6h14.3Z"/><path fill="#329af0" d="M291.2,72.6a11.9,11.9,0,0,1-4.8,9.9,17,17,0,0,1-10.6,3.4,15.6,15.6,0,0,1-10.2-3.3,11.9,11.9,0,0,1-4.7-10V50.1h7.8V71.4a5.4,5.4,0,0,0,2.4,4.5,9.1,9.1,0,0,0,5.3,1.5,8.9,8.9,0,0,0,5-1.5,5.3,5.3,0,0,0,2.3-4.5V50.1h7.5Z"/><path fill="#329af0" d="M317.3,57.7h-8.1V85.9h-7.8V57.7h-8V50.1h23.9Z"/><path fill="#329af0" d="M327.6,85.9h-7.9V50.1h7.9Z"/><path fill="#329af0" d="M354.2,85.9H342.6a11.9,11.9,0,0,1-10-5.5,22.2,22.2,0,0,1-3.2-12.1,23,23,0,0,1,3.3-12.5q3.6-5.7,9.9-5.7h11.6c4.2,0,7.4,1.9,9.9,5.7a23,23,0,0,1,3.3,12.5,22.2,22.2,0,0,1-3.2,12.1A11.3,11.3,0,0,1,354.2,85.9Zm-1.3-7.8q2.9,0,4.5-3.3a14.9,14.9,0,0,0,1.6-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-2,0-3.5,1-4.6,3.1a13.3,13.3,0,0,0-1.5,6.8,14.8,14.8,0,0,0,1.5,7.2c1.2,2.2,2.7,3.3,4.6,3.3Z"/><path fill="#329af0" d="M405.7,78.7a6.9,6.9,0,0,1-2.8,5.6,9.6,9.6,0,0,1-6.3,2.1,10.6,10.6,0,0,1-5.7-1.7,9.7,9.7,0,0,1-3.9-5.4c-.2-.4-.9-2.9-2.2-7.6a85.1,85.1,0,0,0-3-9.8c-1.1-3.2-2.1-4.8-2.9-4.7a2.3,2.3,0,0,0-1,.7,2,2,0,0,0-.3,1.1V85.9h-7.9V57.2a7,7,0,0,1,2.9-6,11.2,11.2,0,0,1,6.6-1.8q5.3,0,8.4,5.4c1.4,2.4,2.8,6.2,4,11.6a81.6,81.6,0,0,0,3.1,10.9,2.7,2.7,0,0,0,.7.8,1.7,1.7,0,0,0,1,.3,1.2,1.2,0,0,0,1-.5,1.7,1.7,0,0,0,.4-1.2V49.9h7.9Z"/><path fill="#329af0" d="M439.1,57.7h-19a2.5,2.5,0,0,0-2,.9,4,4,0,0,0-.8,2.3,3.4,3.4,0,0,0,.7,2.2,2.8,2.8,0,0,0,2.1,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H410.9V78.3H430a2.3,2.3,0,0,0,2-1.1,3.9,3.9,0,0,0,.7-2.3,4.4,4.4,0,0,0-.7-2.2,2.5,2.5,0,0,0-2-.9H418.8a8.8,8.8,0,0,1-7.2-3.4,11.1,11.1,0,0,1-2.5-7.4,11.3,11.3,0,0,1,2.4-7.5,9.1,9.1,0,0,1,7.3-3.4h20.3Z"/><path class="logo-dark" d="M184.3,7.6H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.5,2.5,0,0,0,2,.9h11.2a8.8,8.8,0,0,1,7.2,3.4,12,12,0,0,1,2.4,7.5,12.3,12.3,0,0,1-2.4,7.6,8.8,8.8,0,0,1-7.2,3.4H156.1V28.2h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,11.3,11.3,0,0,1-2.4-7.5,11.5,11.5,0,0,1,2.4-7.4A8.8,8.8,0,0,1,163.9,0h20.4Z"/><path class="logo-dark" d="M219,35.8h-7.9V21.7H196.8V35.8h-7.9V0h7.9V13.9h14.3V0H219Z"/><path class="logo-dark" d="M258.5.2,244,22.6V35.7h-7.9V22.6L221.7.2h9.2l8.6,13.1a.6.6,0,0,0,.6.5,1,1,0,0,0,.8-.5L249.3.2Z"/><path class="logo-dark" d="M288.1,21.7H265.9V35.8H258V17.6a30,30,0,0,1,1-8.5,12.7,12.7,0,0,1,3.8-6.5A11.1,11.1,0,0,1,270.6.1h17.5V7.6H270.6a3.7,3.7,0,0,0-3.3,1.6,5.6,5.6,0,0,0-1.2,3.1c-.1.6-.1,1.1-.2,1.7h22.2Z"/><path class="logo-dark" d="M314.2,7.6h-8.1V35.8h-7.8V7.6h-8.1V.1h24Z"/><text class="logo-dark" font-family="NasalizationRg-Regular, Nasalization" font-size="10.92px" transform="translate(444.6 85.9)">LLC</text></g></g></svg>
             </a>
             <nav class="nav-links">
+                <a href="#quick-links" class="nav-link">Quick Links</a>
                 <a href="#services" class="nav-link">Services</a>
                 <a href="#ocean" class="nav-link">Ocean</a>
                 <a href="#examples" class="nav-link">Examples</a>
-                <a href="#edr-png-examples" class="nav-link">EDR PNG</a>
                 <a href="#api" class="nav-link">API</a>
             </nav>
         </div>
@@ -670,6 +666,98 @@
     </section>
 
     <main class="main">
+        <!-- Quick Links Section -->
+        <section class="section" id="quick-links">
+            <h2 class="section-title">
+                <span class="icon">&#128279;</span>
+                Quick Links
+            </h2>
+
+            <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Platform</h3>
+            <div class="cards-grid" style="margin-bottom: 2rem;">
+                <a href="https://wxchange.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#127758;</span>
+                        <span class="card-title">WxChange Dashboard</span>
+                    </div>
+                    <p class="card-description">Main weather map and monitoring dashboard.</p>
+                    <span class="card-link">Open Dashboard <span>&#8594;</span></span>
+                </a>
+                <a href="https://wxchange.shyftwx.com/dashboard/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#9881;</span>
+                        <span class="card-title">Kubernetes Dashboard</span>
+                    </div>
+                    <p class="card-description">Cluster management and workload monitoring.</p>
+                    <span class="card-link">Open Dashboard <span>&#8594;</span></span>
+                </a>
+                <a href="https://wxchange.shyftwx.com/airflow/home" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128296;</span>
+                        <span class="card-title">Airflow</span>
+                    </div>
+                    <p class="card-description">Workflow orchestration and data pipeline scheduling.</p>
+                    <span class="card-link">Open Airflow <span>&#8594;</span></span>
+                </a>
+            </div>
+
+            <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Monitoring &amp; CI/CD</h3>
+            <div class="cards-grid" style="margin-bottom: 2rem;">
+                <a href="http://grafana.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128200;</span>
+                        <span class="card-title">Grafana</span>
+                    </div>
+                    <p class="card-description">Metrics, logs, and monitoring dashboards.</p>
+                    <span class="card-link">Open Grafana <span>&#8594;</span></span>
+                </a>
+                <a href="https://kiali.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128065;</span>
+                        <span class="card-title">Kiali</span>
+                    </div>
+                    <p class="card-description">Istio service mesh observability and traffic visualization.</p>
+                    <span class="card-link">Open Kiali <span>&#8594;</span></span>
+                </a>
+                <a href="http://jenkins.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128736;</span>
+                        <span class="card-title">Jenkins</span>
+                    </div>
+                    <p class="card-description">CI/CD pipelines and build automation.</p>
+                    <span class="card-link">Open Jenkins <span>&#8594;</span></span>
+                </a>
+                <a href="http://sonar.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128270;</span>
+                        <span class="card-title">SonarQube</span>
+                    </div>
+                    <p class="card-description">Code quality analysis and security scanning.</p>
+                    <span class="card-link">Open SonarQube <span>&#8594;</span></span>
+                </a>
+            </div>
+
+            <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">API Services</h3>
+            <div class="cards-grid">
+                <a href="https://wxchange.shyftwx.com/edr/collections" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#128200;</span>
+                        <span class="card-title">EDR Collections</span>
+                    </div>
+                    <p class="card-description">OGC Environmental Data Retrieval API collections and endpoints.</p>
+                    <span class="card-link">Browse Collections <span>&#8594;</span></span>
+                </a>
+                <a href="https://wxchange.shyftwx.com/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;Version=1.3.0" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="card-header">
+                        <span class="card-icon">&#127758;</span>
+                        <span class="card-title">WMS GetCapabilities</span>
+                    </div>
+                    <p class="card-description">Web Map Service capabilities and available layers.</p>
+                    <span class="card-link">View Capabilities <span>&#8594;</span></span>
+                </a>
+            </div>
+        </section>
+
         <!-- Services Section -->
         <section class="section" id="services">
             <h2 class="section-title">
@@ -1603,7 +1691,7 @@
     <footer class="footer">
         <div class="footer-content">
             <p class="footer-text">
-                FolkWeather provides free access to NOAA and NASA weather data through standard OGC APIs.<br>
+                ShyftWx provides free access to NOAA and NASA weather data through standard OGC APIs.<br>
                 Built with Rust. Data from NOAA/NWS and NASA GES DISC.
             </p>
             <div class="footer-links">
