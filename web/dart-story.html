@@ -246,20 +246,18 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 2rem;
-            overflow-x: auto;
         }
 
         .arch-flow {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0;
-            min-width: 900px;
+            flex-wrap: wrap;
+            gap: 0.25rem 0;
         }
 
         .arch-node {
             text-align: center;
-            flex-shrink: 0;
         }
 
         .arch-box {
@@ -268,11 +266,12 @@
             padding: 1rem 1.25rem;
             background: var(--bg-dark);
             min-width: 130px;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, transform 0.2s;
         }
 
         .arch-box:hover {
             border-color: var(--primary-light);
+            transform: scale(1.03);
         }
 
         .arch-box.source { border-color: var(--accent-cyan); }
@@ -301,7 +300,6 @@
             color: var(--text-muted);
             font-size: 1.5rem;
             padding: 0 0.5rem;
-            flex-shrink: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -390,33 +388,61 @@
 
         /* Pipeline steps */
         .pipeline-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        /* Vertical connector line */
+        .pipeline-steps::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 12px;
+            bottom: 12px;
+            width: 2px;
+            background: var(--border);
         }
 
         .step-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             position: relative;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .step-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
         }
 
         .step-number {
             position: absolute;
-            top: -10px;
-            left: 16px;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
             background: var(--primary);
             color: white;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 700;
+            z-index: 1;
+            border: 3px solid var(--bg-dark);
         }
 
         .step-title {
@@ -602,10 +628,6 @@
         }
 
         @media (max-width: 640px) {
-            .pipeline-steps {
-                grid-template-columns: 1fr;
-            }
-
             .try-grid {
                 grid-template-columns: 1fr;
             }
