@@ -1,0 +1,26 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ include "joegcservices.fullname" . }}-wms-api
+  labels:
+    {{- include "joegcservices.labels" . | nindent 4 }}
+    app.kubernetes.io/component: wms-api
+spec:
+  host: {{ include "joegcservices.fullname" . }}-wms-api
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: {{ .Values.istio.wmsApi.connectionPool.tcp.maxConnections }}
+      http:
+        h2UpgradePolicy: DEFAULT
+        http1MaxPendingRequests: {{ .Values.istio.wmsApi.connectionPool.http.http1MaxPendingRequests }}
+        http2MaxRequests: {{ .Values.istio.wmsApi.connectionPool.http.http2MaxRequests }}
+        maxRequestsPerConnection: {{ .Values.istio.wmsApi.connectionPool.http.maxRequestsPerConnection }}
+        maxRetries: {{ .Values.istio.wmsApi.connectionPool.http.maxRetries }}
+    outlierDetection:
+      consecutive5xxErrors: {{ .Values.istio.wmsApi.outlierDetection.consecutive5xxErrors }}
+      interval: {{ .Values.istio.wmsApi.outlierDetection.interval }}
+      baseEjectionTime: {{ .Values.istio.wmsApi.outlierDetection.baseEjectionTime }}
+      maxEjectionPercent: {{ .Values.istio.wmsApi.outlierDetection.maxEjectionPercent }}
+{{- end }}

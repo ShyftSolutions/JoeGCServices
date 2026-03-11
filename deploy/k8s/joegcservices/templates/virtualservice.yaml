@@ -11,10 +11,16 @@ spec:
   gateways:
     - {{ .Values.istio.gateway }}
   http:
-    # WMS API routes
+    # WMS API routes — tile endpoints get timeout + retry policy so burst
+    # traffic (e.g., animation preloading) queues instead of dropping.
     - match:
         - uri:
             prefix: /wms
+      timeout: {{ .Values.istio.wmsApi.timeout }}
+      retries:
+        attempts: {{ .Values.istio.wmsApi.retries.attempts }}
+        perTryTimeout: {{ .Values.istio.wmsApi.retries.perTryTimeout }}
+        retryOn: {{ .Values.istio.wmsApi.retries.retryOn }}
       route:
         - destination:
             host: {{ include "joegcservices.fullname" . }}-wms-api
@@ -23,6 +29,11 @@ spec:
     - match:
         - uri:
             prefix: /wmts
+      timeout: {{ .Values.istio.wmsApi.timeout }}
+      retries:
+        attempts: {{ .Values.istio.wmsApi.retries.attempts }}
+        perTryTimeout: {{ .Values.istio.wmsApi.retries.perTryTimeout }}
+        retryOn: {{ .Values.istio.wmsApi.retries.retryOn }}
       route:
         - destination:
             host: {{ include "joegcservices.fullname" . }}-wms-api

@@ -74,3 +74,17 @@ minio:
     storageClassName: ebs-gp3
     size: 1Ti
 
+istio:
+  wmsApi:
+    connectionPool:
+      tcp:
+        maxConnections: 500
+      http:
+        http1MaxPendingRequests: 2048
+        http2MaxRequests: 1000
+        maxRetries: 5
+    timeout: 90s
+    retries:
+      attempts: 3
+      perTryTimeout: 45s
+

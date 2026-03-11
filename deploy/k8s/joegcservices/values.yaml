@@ -237,6 +237,32 @@ minio:
 istio:
   enabled: true
   gateway: istio-ingress/main-gateway
+  # WMS API traffic policy — DestinationRule connection pool + circuit breaker,
+  # and VirtualService timeout/retry for /wms and /wmts routes.
+  wmsApi:
+    # Connection pool — Envoy queues burst traffic instead of dropping it.
+    # http1MaxPendingRequests is the key setting: requests that arrive while
+    # all connections are busy wait in the queue rather than being rejected.
+    connectionPool:
+      tcp:
+        maxConnections: 200
+      http:
+        http1MaxPendingRequests: 1024
+        http2MaxRequests: 500
+        maxRequestsPerConnection: 0   # 0 = unlimited (reuse keep-alive connections)
+        maxRetries: 3
+    # Circuit breaker — eject unhealthy pods temporarily
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 10s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+    # VirtualService timeout/retry for tile endpoints
+    timeout: 60s
+    retries:
+      attempts: 2
+      perTryTimeout: 30s
+      retryOn: 5xx,reset,connect-failure,retriable-4xx
 
 # =============================================================================
 # Monitoring
