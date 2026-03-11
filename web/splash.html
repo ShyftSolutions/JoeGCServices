@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShyftWx - Tomorrow's Solutions, Today</title>
+    <title>WxChange - Developer Portal</title>
     <link rel="icon" href="https://shyftsolutions.io/favicon.ico">
     <style>
         * {
@@ -144,54 +144,6 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        /* Construction Banner */
-        .construction-banner {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        .construction-banner .icon {
-            font-size: 1.2rem;
-        }
-
-        .construction-banner .text {
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        /* Status Indicator */
-        .status-live {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
         }
 
         /* Main Content */
@@ -630,6 +582,26 @@
             font-family: 'Monaco', 'Courier New', monospace;
             font-size: 0.85em;
         }
+
+        /* Status indicator for quick links */
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: background 0.3s;
+        }
+
+        .status-indicator.up {
+            background: var(--success);
+            box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+        }
+
+        .status-indicator.down {
+            background: #ef4444;
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -639,30 +611,20 @@
                 <svg viewBox="0 0 464.7 87" xmlns="http://www.w3.org/2000/svg"><g data-name="Layer 2"><g data-name="Layer 1"><path class="logo-dark" d="M71.9,18H26.3a5.6,5.6,0,0,0-4.9,2.4,9.2,9.2,0,0,0-.1,10.7,6,6,0,0,0,5,2.2H53.2c7.2,0,12.9,2.7,17.1,8.2s5.8,10.9,5.8,18-1.9,13.1-5.7,18a21.6,21.6,0,0,1-17.2,8.2H4.2V67.5H50.1a5.6,5.6,0,0,0,4.7-2.6,8.9,8.9,0,0,0,1.6-5.5,8.3,8.3,0,0,0-1.6-5.3,5.5,5.5,0,0,0-4.7-2.2h-27c-7.3,0-13-2.7-17.3-8.1S0,32.9,0,25.9s1.9-13,5.7-17.8A22.1,22.1,0,0,1,23.1,0H71.9Z"/><path fill="#329af0" d="M71.7,0h48.7q10.9,0,17.4,8.1c3.8,4.8,5.7,10.8,5.7,17.8s-1.9,13-5.8,17.9a21.8,21.8,0,0,1-17.3,8.1H93.6a5.5,5.5,0,0,0-4.8,2.2,8.3,8.3,0,0,0-1.6,5.3,8.9,8.9,0,0,0,1.6,5.5,5.8,5.8,0,0,0,4.8,2.6h45.7V85.7H90.5c-7.3,0-13.1-2.7-17.3-8.2s-5.6-10.9-5.6-18,1.9-13.1,5.7-18a21.5,21.5,0,0,1,17.2-8.2h26.8a5.8,5.8,0,0,0,4.9-2.2,7.9,7.9,0,0,0,1.8-5.3,8.6,8.6,0,0,0-1.8-5.4,5.9,5.9,0,0,0-4.9-2.4H71.7Z"/><path fill="#329af0" d="M184.3,57.7H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.6,2.6,0,0,0,2,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H156.1V78.3h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,12.8,12.8,0,0,1,0-14.9,8.8,8.8,0,0,1,7.2-3.4h20.4Z"/><path fill="#329af0" d="M212.3,85.9H200.6a11.3,11.3,0,0,1-9.9-5.5,21.4,21.4,0,0,1-3.3-12.1,23,23,0,0,1,3.3-12.5q3.8-5.7,9.9-5.7h11.7c4.1,0,7.4,1.9,9.8,5.7a22.8,22.8,0,0,1,3.4,12.5,21.4,21.4,0,0,1-3.3,12.1A11.3,11.3,0,0,1,212.3,85.9Zm-1.4-7.8c1.9,0,3.4-1.1,4.6-3.3a14.8,14.8,0,0,0,1.5-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-1.9,0-3.4,1-4.5,3.1a13.4,13.4,0,0,0-1.6,6.8,16.1,16.1,0,0,0,1.6,7.2q1.7,3.3,4.5,3.3Z"/><path fill="#329af0" d="M257.9,85.9H243.6c-4.5,0-8.1-1.2-10.7-3.5a13.3,13.3,0,0,1-4.4-7.2,24.4,24.4,0,0,1-.9-6.6v-1a1.7,1.7,0,0,0,.1-.7V50.1h7.9V66.9a14.3,14.3,0,0,0,1.9,7.6,7,7,0,0,0,6.1,3.6h14.3Z"/><path fill="#329af0" d="M291.2,72.6a11.9,11.9,0,0,1-4.8,9.9,17,17,0,0,1-10.6,3.4,15.6,15.6,0,0,1-10.2-3.3,11.9,11.9,0,0,1-4.7-10V50.1h7.8V71.4a5.4,5.4,0,0,0,2.4,4.5,9.1,9.1,0,0,0,5.3,1.5,8.9,8.9,0,0,0,5-1.5,5.3,5.3,0,0,0,2.3-4.5V50.1h7.5Z"/><path fill="#329af0" d="M317.3,57.7h-8.1V85.9h-7.8V57.7h-8V50.1h23.9Z"/><path fill="#329af0" d="M327.6,85.9h-7.9V50.1h7.9Z"/><path fill="#329af0" d="M354.2,85.9H342.6a11.9,11.9,0,0,1-10-5.5,22.2,22.2,0,0,1-3.2-12.1,23,23,0,0,1,3.3-12.5q3.6-5.7,9.9-5.7h11.6c4.2,0,7.4,1.9,9.9,5.7a23,23,0,0,1,3.3,12.5,22.2,22.2,0,0,1-3.2,12.1A11.3,11.3,0,0,1,354.2,85.9Zm-1.3-7.8q2.9,0,4.5-3.3a14.9,14.9,0,0,0,1.6-7.2,13.3,13.3,0,0,0-1.5-6.8c-1.1-2.1-2.6-3.1-4.6-3.1h-9c-2,0-3.5,1-4.6,3.1a13.3,13.3,0,0,0-1.5,6.8,14.8,14.8,0,0,0,1.5,7.2c1.2,2.2,2.7,3.3,4.6,3.3Z"/><path fill="#329af0" d="M405.7,78.7a6.9,6.9,0,0,1-2.8,5.6,9.6,9.6,0,0,1-6.3,2.1,10.6,10.6,0,0,1-5.7-1.7,9.7,9.7,0,0,1-3.9-5.4c-.2-.4-.9-2.9-2.2-7.6a85.1,85.1,0,0,0-3-9.8c-1.1-3.2-2.1-4.8-2.9-4.7a2.3,2.3,0,0,0-1,.7,2,2,0,0,0-.3,1.1V85.9h-7.9V57.2a7,7,0,0,1,2.9-6,11.2,11.2,0,0,1,6.6-1.8q5.3,0,8.4,5.4c1.4,2.4,2.8,6.2,4,11.6a81.6,81.6,0,0,0,3.1,10.9,2.7,2.7,0,0,0,.7.8,1.7,1.7,0,0,0,1,.3,1.2,1.2,0,0,0,1-.5,1.7,1.7,0,0,0,.4-1.2V49.9h7.9Z"/><path fill="#329af0" d="M439.1,57.7h-19a2.5,2.5,0,0,0-2,.9,4,4,0,0,0-.8,2.3,3.4,3.4,0,0,0,.7,2.2,2.8,2.8,0,0,0,2.1,1h11.2a8.7,8.7,0,0,1,7.2,3.3,13.1,13.1,0,0,1,0,15.1,8.8,8.8,0,0,1-7.2,3.4H410.9V78.3H430a2.3,2.3,0,0,0,2-1.1,3.9,3.9,0,0,0,.7-2.3,4.4,4.4,0,0,0-.7-2.2,2.5,2.5,0,0,0-2-.9H418.8a8.8,8.8,0,0,1-7.2-3.4,11.1,11.1,0,0,1-2.5-7.4,11.3,11.3,0,0,1,2.4-7.5,9.1,9.1,0,0,1,7.3-3.4h20.3Z"/><path class="logo-dark" d="M184.3,7.6H165.2a2.5,2.5,0,0,0-2,.9,3.9,3.9,0,0,0-.7,2.3,3.4,3.4,0,0,0,.7,2.2,2.5,2.5,0,0,0,2,.9h11.2a8.8,8.8,0,0,1,7.2,3.4,12,12,0,0,1,2.4,7.5,12.3,12.3,0,0,1-2.4,7.6,8.8,8.8,0,0,1-7.2,3.4H156.1V28.2h19.1a2.1,2.1,0,0,0,1.9-1.1,3.9,3.9,0,0,0,.7-2.3,3.4,3.4,0,0,0-.7-2.2,2.3,2.3,0,0,0-1.9-.9H163.9a8.8,8.8,0,0,1-7.2-3.4,11.3,11.3,0,0,1-2.4-7.5,11.5,11.5,0,0,1,2.4-7.4A8.8,8.8,0,0,1,163.9,0h20.4Z"/><path class="logo-dark" d="M219,35.8h-7.9V21.7H196.8V35.8h-7.9V0h7.9V13.9h14.3V0H219Z"/><path class="logo-dark" d="M258.5.2,244,22.6V35.7h-7.9V22.6L221.7.2h9.2l8.6,13.1a.6.6,0,0,0,.6.5,1,1,0,0,0,.8-.5L249.3.2Z"/><path class="logo-dark" d="M288.1,21.7H265.9V35.8H258V17.6a30,30,0,0,1,1-8.5,12.7,12.7,0,0,1,3.8-6.5A11.1,11.1,0,0,1,270.6.1h17.5V7.6H270.6a3.7,3.7,0,0,0-3.3,1.6,5.6,5.6,0,0,0-1.2,3.1c-.1.6-.1,1.1-.2,1.7h22.2Z"/><path class="logo-dark" d="M314.2,7.6h-8.1V35.8h-7.8V7.6h-8.1V.1h24Z"/><text class="logo-dark" font-family="NasalizationRg-Regular, Nasalization" font-size="10.92px" transform="translate(444.6 85.9)">LLC</text></g></g></svg>
             </a>
             <nav class="nav-links">
-                <a href="#quick-links" class="nav-link">Quick Links</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#ocean" class="nav-link">Ocean</a>
+                <a href="#quick-links" class="nav-link">Services</a>
+                <a href="#ocean" class="nav-link">Observations</a>
                 <a href="#examples" class="nav-link">Examples</a>
                 <a href="#api" class="nav-link">API</a>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" style="padding: 2rem 1.5rem;">
         <div class="hero-content">
-            <div class="construction-banner">
-                <span class="icon">&#128679;</span>
-                <span class="text">Under Construction - More features coming soon!</span>
-            </div>
-            <h1>Tomorrow's Solutions <span>Today</span></h1>
+            <h1>WxChange <span>Developer Portal</span></h1>
             <p class="hero-tagline">
-                Free, open weather data services powered by OGC standards. 
-                Access NOAA and NASA weather data through WMS, WMTS, and EDR APIs.
+                NOAA and NASA weather data via OGC WMS, WMTS, and EDR APIs.
             </p>
-            <div class="status-live">
-                <span class="status-dot"></span>
-                <span>Services Online</span>
-            </div>
         </div>
     </section>
 
@@ -671,179 +633,154 @@
         <section class="section" id="quick-links">
             <h2 class="section-title">
                 <span class="icon">&#128279;</span>
-                Quick Links
+                Services &amp; Tools
             </h2>
 
             <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Platform</h3>
             <div class="cards-grid" style="margin-bottom: 2rem;">
-                <a href="https://wxchange.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://wxchange.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="https://wxchange.shyftwx.com/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#127758;</span>
                         <span class="card-title">WxChange Dashboard</span>
                     </div>
                     <p class="card-description">Main weather map and monitoring dashboard.</p>
-                    <span class="card-link">Open Dashboard <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="https://wxchange.shyftwx.com/airflow/home" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://wxchange.shyftwx.com/airflow/home" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="https://wxchange.shyftwx.com/airflow/home">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128296;</span>
                         <span class="card-title">Airflow</span>
                     </div>
                     <p class="card-description">Workflow orchestration and data pipeline scheduling.</p>
-                    <span class="card-link">Open Airflow <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
             </div>
 
             <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Monitoring &amp; CI/CD</h3>
             <div class="cards-grid" style="margin-bottom: 2rem;">
-                <a href="http://grafana.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="http://grafana.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="http://grafana.tools.shyftwx.com/">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128200;</span>
                         <span class="card-title">Grafana</span>
                     </div>
                     <p class="card-description">Metrics, logs, and monitoring dashboards.</p>
-                    <span class="card-link">Open Grafana <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="https://kiali.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://kiali.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="https://kiali.tools.shyftwx.com/">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128065;</span>
                         <span class="card-title">Kiali</span>
                     </div>
                     <p class="card-description">Istio service mesh observability and traffic visualization.</p>
-                    <span class="card-link">Open Kiali <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="http://jenkins.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="http://jenkins.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="http://jenkins.tools.shyftwx.com/">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128736;</span>
                         <span class="card-title">Jenkins</span>
                     </div>
                     <p class="card-description">CI/CD pipelines and build automation.</p>
-                    <span class="card-link">Open Jenkins <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="http://sonar.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="http://sonar.tools.shyftwx.com/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="http://sonar.tools.shyftwx.com/">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128270;</span>
                         <span class="card-title">SonarQube</span>
                     </div>
                     <p class="card-description">Code quality analysis and security scanning.</p>
-                    <span class="card-link">Open SonarQube <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
             </div>
 
             <h3 style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Data &amp; API Services</h3>
             <div class="cards-grid">
-                <a href="https://wxchange.shyftwx.com/dashboard/" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://wxchange.shyftwx.com/dashboard/" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="/edr/collections/ndbc/locations">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#9875;</span>
                         <span class="card-title">Ocean Buoy Dashboard</span>
                     </div>
                     <p class="card-description">Interactive map displaying real-time ocean buoy observations.</p>
-                    <span class="card-link">Open Map <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="https://wxchange.shyftwx.com/edr/collections" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://wxchange.shyftwx.com/edr/collections" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="/edr/collections">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#128200;</span>
                         <span class="card-title">EDR Collections</span>
                     </div>
                     <p class="card-description">OGC Environmental Data Retrieval API collections and endpoints.</p>
-                    <span class="card-link">Browse Collections <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
-                <a href="https://wxchange.shyftwx.com/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;Version=1.3.0" class="card" target="_blank" style="text-decoration: none; color: inherit;">
+                <a href="https://wxchange.shyftwx.com/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;Version=1.3.0" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0">
                     <div class="card-header">
+                        <span class="status-indicator"></span>
                         <span class="card-icon">&#127758;</span>
                         <span class="card-title">WMS GetCapabilities</span>
                     </div>
                     <p class="card-description">Web Map Service capabilities and available layers.</p>
-                    <span class="card-link">View Capabilities <span>&#8594;</span></span>
+                    <span class="card-link">Open <span>&#8594;</span></span>
+                </a>
+                <a href="/wmts?SERVICE=WMTS&amp;REQUEST=GetCapabilities&amp;VERSION=1.0.0" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0">
+                    <div class="card-header">
+                        <span class="status-indicator"></span>
+                        <span class="card-icon">&#129518;</span>
+                        <span class="card-title">WMTS GetCapabilities</span>
+                    </div>
+                    <p class="card-description">Tiled map service for efficient weather tile rendering.</p>
+                    <span class="card-link">Open <span>&#8594;</span></span>
+                </a>
+                <a href="/edr/api.html" class="card" target="_blank" style="text-decoration: none; color: inherit;" data-health-url="/edr/api.html">
+                    <div class="card-header">
+                        <span class="status-indicator"></span>
+                        <span class="card-icon">&#128214;</span>
+                        <span class="card-title">EDR API Docs</span>
+                    </div>
+                    <p class="card-description">Interactive API documentation and query builder.</p>
+                    <span class="card-link">Open <span>&#8594;</span></span>
                 </a>
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section class="section" id="services">
-            <h2 class="section-title">
-                <span class="icon">&#128268;</span>
-                Available Services
-            </h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#127758;</span>
-                        <span class="card-title">WMS - Web Map Service</span>
-                    </div>
-                    <p class="card-description">
-                        OGC-compliant Web Map Service for rendering weather data as map images.
-                        Supports GetCapabilities, GetMap, and GetFeatureInfo operations.
-                    </p>
-                    <a href="/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0" class="card-link" target="_blank">
-                        View Capabilities <span>&#8594;</span>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#129518;</span>
-                        <span class="card-title">WMTS - Tiled Map Service</span>
-                    </div>
-                    <p class="card-description">
-                        High-performance tiled map service for efficient weather visualization.
-                        Pre-rendered tiles for fast loading in web mapping applications.
-                    </p>
-                    <a href="/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0" class="card-link" target="_blank">
-                        View Capabilities <span>&#8594;</span>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#128200;</span>
-                        <span class="card-title">EDR - Environmental Data</span>
-                    </div>
-                    <p class="card-description">
-                        OGC API - Environmental Data Retrieval for point, area, and trajectory queries.
-                        Get weather data in GeoJSON or CoverageJSON formats.
-                    </p>
-                    <a href="/edr" class="card-link" target="_blank">
-                        Explore API <span>&#8594;</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Ocean Data Section -->
+        <!-- Ocean & Observation Data Section -->
         <section class="section" id="ocean">
             <h2 class="section-title">
                 <span class="icon">&#127754;</span>
-                Ocean Data Services
+                Observation Data
             </h2>
             <div class="examples-section">
                 <p class="card-description">
-                    Real-time ocean observations and wave forecasts via OGC EDR API. 
-                    Buoy data is ingested continuously; wave model data updates every 6 hours.
+                    Real-time observations via OGC EDR API. Buoy data ingested continuously.
                 </p>
                 <div class="edr-examples-grid">
-                    <!-- GFS-Wave Forecast -->
-                    <a href="/edr/collections/gfswave-surface-latest/position?coords=POINT(-122.4 37.8)&parameter-name=HTSGW,PERPW,DIRPW" target="_blank" class="edr-example-item">
+                    <!-- GFS Surface Forecast -->
+                    <a href="/edr/collections/gfs-height-agl-latest/position?coords=POINT(-122.4 37.8)&parameter-name=TMP,UGRD,VGRD" target="_blank" class="edr-example-item">
                         <div class="edr-example-header">
-                            <span class="location-icon">&#127754;</span>
-                            <span class="location-name">GFS-Wave Forecast</span>
-                            <span class="location-id">WAVEWATCH III</span>
+                            <span class="location-icon">&#127758;</span>
+                            <span class="location-name">GFS Point Forecast</span>
+                            <span class="location-id">GFS 0.25&deg;</span>
                         </div>
                         <div class="edr-response-container">
-                            <pre class="edr-response"><span class="key">"description"</span>: <span class="string">"Global wave forecasts, 0.25&deg;"</span>,
+                            <pre class="edr-response"><span class="key">"description"</span>: <span class="string">"Global forecasts, 0.25&deg;"</span>,
 <span class="key">"parameters"</span>: [
-  <span class="string">"HTSGW"</span>  - Significant wave height (m)
-  <span class="string">"PERPW"</span>  - Primary wave period (s)
-  <span class="string">"DIRPW"</span>  - Primary wave direction (deg)
-  <span class="string">"WVHGT"</span>  - Wind wave height (m)
-  <span class="string">"WIND"</span>   - Surface wind speed (m/s)
+  <span class="string">"TMP"</span>   - Temperature (K)
+  <span class="string">"UGRD"</span>  - U-component wind (m/s)
+  <span class="string">"VGRD"</span>  - V-component wind (m/s)
+  <span class="string">"DPT"</span>   - Dewpoint temperature (K)
+  <span class="string">"RH"</span>    - Relative humidity (%)
 ]
 <span class="key">"update"</span>: <span class="string">"Every 6h (00z/06z/12z/18z)"</span></pre>
                         </div>
                         <div class="edr-example-info">
-                            <div class="edr-example-title">Wave Forecasts - Global Coverage</div>
-                            <div class="edr-example-desc">Point, area, and radius queries for wave conditions worldwide</div>
-                            <div class="edr-example-endpoint">GET /edr/collections/gfswave-surface-latest/position?coords=POINT(lon lat)</div>
+                            <div class="edr-example-title">GFS Forecasts - Global Coverage</div>
+                            <div class="edr-example-desc">Point, area, and radius queries for weather conditions worldwide</div>
+                            <div class="edr-example-endpoint">GET /edr/collections/gfs-height-agl-latest/position?coords=POINT(lon lat)</div>
                         </div>
                     </a>
 
@@ -1063,41 +1000,22 @@
                         </div>
                     </a>
 
-                    <!-- GFS-Wave Significant Wave Height -->
-                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfswave_HTSGW&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=800&HEIGHT=400&FORMAT=image/png" target="_blank" class="example-item">
-                        <div class="example-img-container">
-                            <div class="example-placeholder" id="placeholder-6">
-                                <div class="spinner"></div>
-                                <span>Loading...</span>
-                            </div>
-                            <img class="example-img" 
-                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfswave_HTSGW&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=400&HEIGHT=200&FORMAT=image/png"
-                                 alt="GFS-Wave Significant Wave Height"
-                                 onload="this.classList.add('loaded'); document.getElementById('placeholder-6').style.display='none';"
-                                 onerror="document.getElementById('placeholder-6').innerHTML='<span>Data unavailable</span>';">
-                        </div>
-                        <div class="example-info">
-                            <div class="example-title">GFS-Wave Height</div>
-                            <div class="example-desc">WAVEWATCH III - Global significant wave height forecast</div>
-                        </div>
-                    </a>
-
-                    <!-- Sea Surface Temperature -->
-                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_SST&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=800&HEIGHT=400&FORMAT=image/png" target="_blank" class="example-item">
+                    <!-- GFS Mean Sea Level Pressure -->
+                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_PRMSL&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=800&HEIGHT=400&FORMAT=image/png" target="_blank" class="example-item">
                         <div class="example-img-container">
                             <div class="example-placeholder" id="placeholder-7">
                                 <div class="spinner"></div>
                                 <span>Loading...</span>
                             </div>
                             <img class="example-img" 
-                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_SST&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=400&HEIGHT=200&FORMAT=image/png"
-                                 alt="Sea Surface Temperature"
+                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_PRMSL&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=400&HEIGHT=200&FORMAT=image/png"
+                                 alt="GFS Mean Sea Level Pressure"
                                  onload="this.classList.add('loaded'); document.getElementById('placeholder-7').style.display='none';"
                                  onerror="document.getElementById('placeholder-7').innerHTML='<span>Data unavailable</span>';">
                         </div>
                         <div class="example-info">
-                            <div class="example-title">Sea Surface Temperature</div>
-                            <div class="example-desc">GFS - Global ocean surface temperature</div>
+                            <div class="example-title">Mean Sea Level Pressure</div>
+                            <div class="example-desc">GFS - Global mean sea level pressure analysis</div>
                         </div>
                     </a>
 
@@ -1120,60 +1038,60 @@
                         </div>
                     </a>
 
-                    <!-- NLDAS Soil Moisture -->
-                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_SoilM_0_10cm&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=800&HEIGHT=388&FORMAT=image/png" target="_blank" class="example-item">
+                    <!-- NDFD Temperature -->
+                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=ndfd_TMP&STYLES=gradient&CRS=EPSG:4326&BBOX=20,-130,55,-60&WIDTH=800&HEIGHT=400&FORMAT=image/png" target="_blank" class="example-item">
                         <div class="example-img-container">
                             <div class="example-placeholder" id="placeholder-9">
                                 <div class="spinner"></div>
                                 <span>Loading...</span>
                             </div>
                             <img class="example-img" 
-                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_SoilM_0_10cm&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=400&HEIGHT=194&FORMAT=image/png"
-                                 alt="NLDAS Soil Moisture"
+                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=ndfd_TMP&STYLES=gradient&CRS=EPSG:4326&BBOX=20,-130,55,-60&WIDTH=400&HEIGHT=200&FORMAT=image/png"
+                                 alt="NDFD Temperature"
                                  onload="this.classList.add('loaded'); document.getElementById('placeholder-9').style.display='none';"
                                  onerror="document.getElementById('placeholder-9').innerHTML='<span>Data unavailable</span>';">
                         </div>
                         <div class="example-info">
-                            <div class="example-title">NLDAS Soil Moisture</div>
-                            <div class="example-desc">NASA NLDAS-2 Noah - Top 10cm soil moisture over CONUS</div>
+                            <div class="example-title">NDFD Temperature</div>
+                            <div class="example-desc">National Digital Forecast Database - NWS forecast temperature</div>
                         </div>
                     </a>
 
-                    <!-- NLDAS Skin Temperature -->
-                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_AvgSurfT&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=800&HEIGHT=388&FORMAT=image/png" target="_blank" class="example-item">
+                    <!-- HRRR Dewpoint -->
+                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=hrrr_DPT&STYLES=gradient&CRS=EPSG:4326&BBOX=21,-123,48,-61&WIDTH=800&HEIGHT=435&FORMAT=image/png" target="_blank" class="example-item">
                         <div class="example-img-container">
                             <div class="example-placeholder" id="placeholder-10">
                                 <div class="spinner"></div>
                                 <span>Loading...</span>
                             </div>
                             <img class="example-img" 
-                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_AvgSurfT&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=400&HEIGHT=194&FORMAT=image/png"
-                                 alt="NLDAS Skin Temperature"
+                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=hrrr_DPT&STYLES=gradient&CRS=EPSG:4326&BBOX=21,-123,48,-61&WIDTH=400&HEIGHT=218&FORMAT=image/png"
+                                 alt="HRRR Dewpoint Temperature"
                                  onload="this.classList.add('loaded'); document.getElementById('placeholder-10').style.display='none';"
                                  onerror="document.getElementById('placeholder-10').innerHTML='<span>Data unavailable</span>';">
                         </div>
                         <div class="example-info">
-                            <div class="example-title">NLDAS Skin Temperature</div>
-                            <div class="example-desc">NASA NLDAS-2 Noah - Earth skin temperature over CONUS</div>
+                            <div class="example-title">HRRR Dewpoint</div>
+                            <div class="example-desc">HRRR 3km - Dewpoint temperature over CONUS</div>
                         </div>
                     </a>
 
-                    <!-- NLDAS Vegetation (LAI) -->
-                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_LAI&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=800&HEIGHT=388&FORMAT=image/png" target="_blank" class="example-item">
+                    <!-- GFS Relative Humidity -->
+                    <a href="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_RH&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=800&HEIGHT=400&FORMAT=image/png" target="_blank" class="example-item">
                         <div class="example-img-container">
                             <div class="example-placeholder" id="placeholder-11">
                                 <div class="spinner"></div>
                                 <span>Loading...</span>
                             </div>
                             <img class="example-img" 
-                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=nldas-noah_LAI&STYLES=gradient&CRS=EPSG:4326&BBOX=25.0625,-124.9375,52.9375,-67.0625&WIDTH=400&HEIGHT=194&FORMAT=image/png"
-                                 alt="NLDAS Leaf Area Index"
+                                 data-src="/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=gfs_RH&STYLES=gradient&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=400&HEIGHT=200&FORMAT=image/png"
+                                 alt="GFS Relative Humidity"
                                  onload="this.classList.add('loaded'); document.getElementById('placeholder-11').style.display='none';"
                                  onerror="document.getElementById('placeholder-11').innerHTML='<span>Data unavailable</span>';">
                         </div>
                         <div class="example-info">
-                            <div class="example-title">NLDAS Vegetation</div>
-                            <div class="example-desc">NASA NLDAS-2 Noah - Leaf Area Index over CONUS</div>
+                            <div class="example-title">GFS Relative Humidity</div>
+                            <div class="example-desc">GFS 0.25° - Global relative humidity analysis</div>
                         </div>
                     </a>
                 </div>
@@ -1249,22 +1167,22 @@
                         </div>
                     </a>
 
-                    <!-- GFS Global -->
-                    <a href="/edr/collections/gfs-height-agl/area?coords=POLYGON((-180%20-60,180%20-60,180%2080,-180%2080,-180%20-60))&parameter-name=TMP&f=png&depth=8&width=800&height=400" target="_blank" class="example-item">
+                    <!-- GFS North America + Atlantic -->
+                    <a href="/edr/collections/gfs-height-agl/area?coords=POLYGON((-140%2010,-30%2010,-30%2070,-140%2070,-140%2010))&parameter-name=TMP&f=png&depth=8&width=800&height=400" target="_blank" class="example-item">
                         <div class="example-img-container">
                             <div class="example-placeholder" id="placeholder-edr-4">
                                 <div class="spinner"></div>
                                 <span>Loading...</span>
                             </div>
                             <img class="example-img" 
-                                 data-src="/edr/collections/gfs-height-agl/area?coords=POLYGON((-180%20-60,180%20-60,180%2080,-180%2080,-180%20-60))&parameter-name=TMP&f=png&depth=8&width=400&height=200"
-                                 alt="GFS Global Temperature PNG"
+                                 data-src="/edr/collections/gfs-height-agl/area?coords=POLYGON((-140%2010,-30%2010,-30%2070,-140%2070,-140%2010))&parameter-name=TMP&f=png&depth=8&width=400&height=200"
+                                 alt="GFS North America Temperature PNG"
                                  onload="this.classList.add('loaded'); document.getElementById('placeholder-edr-4').style.display='none';"
                                  onerror="document.getElementById('placeholder-edr-4').innerHTML='<span>Data unavailable</span>';">
                         </div>
                         <div class="example-info">
-                            <div class="example-title">GFS Global Temperature</div>
-                            <div class="example-desc">Worldwide coverage in single request</div>
+                            <div class="example-title">GFS North America Temperature</div>
+                            <div class="example-desc">Regional GFS coverage across North America</div>
                         </div>
                     </a>
 
@@ -1424,27 +1342,27 @@
                     </a>
 
                     <!-- NDBC Buoy -->
-                    <a href="/edr/collections/ndbc/locations/46042" target="_blank" class="edr-example-item">
+                    <a href="/edr/collections/ndbc/locations/41004" target="_blank" class="edr-example-item">
                         <div class="edr-example-header">
                             <span class="location-icon">&#9875;</span>
-                            <span class="location-name">Monterey Bay Buoy</span>
-                            <span class="location-id">46042</span>
+                            <span class="location-name">South Atlantic Buoy</span>
+                            <span class="location-id">41004</span>
                         </div>
                         <div class="edr-response-container">
                             <pre class="edr-response" id="edr-response-4"><span class="key">"properties"</span>: {
-  <span class="key">"location_id"</span>: <span class="string">"46042"</span>,
-  <span class="key">"obs_time"</span>: <span class="string">"2026-02-11T04:50:00Z"</span>,
-  <span class="key">"wave_height_m"</span>: <span class="number">2.4</span>,
-  <span class="key">"dominant_wave_period_s"</span>: <span class="number">12.5</span>,
-  <span class="key">"water_temp_k"</span>: <span class="number">285.9</span>,
-  <span class="key">"wind_speed_ms"</span>: <span class="number">6.2</span>,
-  <span class="key">"sea_level_pressure_pa"</span>: <span class="number">101780</span>
+  <span class="key">"location_id"</span>: <span class="string">"41004"</span>,
+  <span class="key">"obs_time"</span>: <span class="string">"2026-03-11T00:20:00Z"</span>,
+  <span class="key">"wave_height_m"</span>: <span class="number">0.9</span>,
+  <span class="key">"dominant_wave_period_s"</span>: <span class="number">9.0</span>,
+  <span class="key">"water_temp_k"</span>: <span class="number">293.35</span>,
+  <span class="key">"wind_speed_ms"</span>: <span class="number">5.0</span>,
+  <span class="key">"sea_level_pressure_pa"</span>: <span class="number">101990</span>
 }</pre>
                         </div>
                         <div class="edr-example-info">
                             <div class="edr-example-title">NDBC Buoy Observations</div>
-                            <div class="edr-example-desc">Waves, wind, and SST at Monterey Bay</div>
-                            <div class="edr-example-endpoint">/edr/collections/ndbc/locations/46042</div>
+                            <div class="edr-example-desc">Waves, wind, and SST off Charleston, SC</div>
+                            <div class="edr-example-endpoint">/edr/collections/ndbc/locations/41004</div>
                         </div>
                     </a>
 
@@ -1471,32 +1389,32 @@
                         </div>
                     </a>
 
-                    <!-- GFS-Wave -->
-                    <a href="/edr/collections/gfswave-surface-latest/position?coords=POINT(-122.4 37.8)&parameter-name=HTSGW,PERPW,DIRPW" target="_blank" class="edr-example-item">
+                    <!-- GFS Point Forecast -->
+                    <a href="/edr/collections/gfs-height-agl-latest/position?coords=POINT(-122.4 37.8)&parameter-name=TMP,UGRD,VGRD" target="_blank" class="edr-example-item">
                         <div class="edr-example-header">
-                            <span class="location-icon">&#127754;</span>
-                            <span class="location-name">San Francisco Coast</span>
-                            <span class="location-id">GFS-Wave</span>
+                            <span class="location-icon">&#127758;</span>
+                            <span class="location-name">San Francisco</span>
+                            <span class="location-id">GFS 0.25&deg;</span>
                         </div>
                         <div class="edr-response-container">
                             <pre class="edr-response" id="edr-response-6"><span class="key">"parameters"</span>: {
-  <span class="key">"HTSGW"</span>: {
-    <span class="key">"description"</span>: <span class="string">"Sig Wave Height"</span>,
-    <span class="key">"unit"</span>: <span class="string">"m"</span>
+  <span class="key">"TMP"</span>: {
+    <span class="key">"description"</span>: <span class="string">"Temperature"</span>,
+    <span class="key">"unit"</span>: <span class="string">"K"</span>
   },
-  <span class="key">"PERPW"</span>: {
-    <span class="key">"description"</span>: <span class="string">"Primary Wave Period"</span>,
-    <span class="key">"unit"</span>: <span class="string">"s"</span>
+  <span class="key">"UGRD"</span>: {
+    <span class="key">"description"</span>: <span class="string">"U-Component Wind"</span>,
+    <span class="key">"unit"</span>: <span class="string">"m/s"</span>
   }
 },
 <span class="key">"ranges"</span>: {
-  <span class="key">"HTSGW"</span>: { <span class="key">"values"</span>: [<span class="number">2.8</span>] }
+  <span class="key">"TMP"</span>: { <span class="key">"values"</span>: [<span class="number">288.5</span>] }
 }</pre>
                         </div>
                         <div class="edr-example-info">
-                            <div class="edr-example-title">GFS-Wave Forecast</div>
-                            <div class="edr-example-desc">Wave height, period, and direction off SF coast</div>
-                            <div class="edr-example-endpoint">/edr/collections/gfswave-surface-latest/position</div>
+                            <div class="edr-example-title">GFS Point Forecast</div>
+                            <div class="edr-example-desc">Temperature and wind at San Francisco</div>
+                            <div class="edr-example-endpoint">/edr/collections/gfs-height-agl-latest/position</div>
                         </div>
                     </a>
                 </div>
@@ -1546,7 +1464,7 @@
         <section class="section">
             <h2 class="section-title">
                 <span class="icon">&#128202;</span>
-                Available Data Sources
+                Data Catalog
             </h2>
             <div class="cards-grid">
                 <div class="card">
@@ -1605,42 +1523,6 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-icon">&#127754;</span>
-                        <span class="card-title">GFS-Wave (WAVEWATCH III)</span>
-                    </div>
-                    <p class="card-description">
-                        Global wave forecasts at 0.25&deg; resolution. Significant wave height, period, direction, wind waves, and surface wind. Updated every 6 hours with forecasts to 120 hours.
-                    </p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#127757;</span>
-                        <span class="card-title">SST &amp; Sea Ice</span>
-                    </div>
-                    <p class="card-description">
-                        GFS sea surface temperature, sea ice concentration, thickness, and temperature. Global coverage at 0.25&deg; resolution with 6-hourly updates.
-                    </p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#127793;</span>
-                        <span class="card-title">NLDAS-2 Noah Land Surface</span>
-                    </div>
-                    <p class="card-description">
-                        NASA NLDAS-2 Noah land surface model at 0.125&deg; hourly resolution. 37 variables including soil moisture, soil temperature, snow, radiation, and evapotranspiration over CONUS.
-                    </p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-icon">&#9729;</span>
-                        <span class="card-title">NLDAS-2 Forcing</span>
-                    </div>
-                    <p class="card-description">
-                        NASA NLDAS-2 atmospheric forcing data at 0.125&deg; hourly resolution. Air temperature, precipitation, humidity, pressure, wind, and radiation over CONUS.
-                    </p>
-                </div>
-                <div class="card">
-                    <div class="card-header">
                         <span class="card-icon">&#9875;</span>
                         <span class="card-title">NDBC Buoys</span>
                     </div>
@@ -1660,40 +1542,13 @@
             </div>
         </section>
 
-        <!-- Coming Soon Section -->
-        <section class="section">
-            <h2 class="section-title">
-                <span class="icon">&#128640;</span>
-                Coming Soon
-            </h2>
-            <div class="cards-grid">
-                <div class="card" style="opacity: 0.7;">
-                    <div class="card-header">
-                        <span class="card-icon">&#127754;</span>
-                        <span class="card-title">NAM Model</span>
-                    </div>
-                    <p class="card-description">
-                        North American Mesoscale model for regional forecasts with 12km resolution.
-                    </p>
-                </div>
-                <div class="card" style="opacity: 0.7;">
-                    <div class="card-header">
-                        <span class="card-icon">&#9968;</span>
-                        <span class="card-title">NWS Alerts</span>
-                    </div>
-                    <p class="card-description">
-                        Real-time severe weather alerts, watches, and warnings from the National Weather Service.
-                    </p>
-                </div>
-            </div>
-        </section>
+
     </main>
 
     <footer class="footer">
         <div class="footer-content">
             <p class="footer-text">
-                ShyftWx provides free access to NOAA and NASA weather data through standard OGC APIs.<br>
-                Built with Rust. Data from NOAA/NWS and NASA GES DISC.
+                Data from NOAA/NWS and NASA GES DISC. Built with Rust.
             </p>
             <div class="footer-links">
                 <a href="https://github.com" class="footer-link">GitHub</a>
@@ -1705,11 +1560,32 @@
     </footer>
 
     <script>
-        // Lazy load images
         document.addEventListener('DOMContentLoaded', function() {
+            // Lazy load images
             const images = document.querySelectorAll('.example-img[data-src]');
             images.forEach(img => {
                 img.src = img.dataset.src;
+            });
+
+            // Health check status indicators
+            document.querySelectorAll('[data-health-url]').forEach(card => {
+                const url = card.dataset.healthUrl;
+                const dot = card.querySelector('.status-indicator');
+                if (!dot) return;
+                const ctrl = new AbortController();
+                setTimeout(() => ctrl.abort(), 8000);
+                const sameOrigin = url.startsWith('/') || url.startsWith(location.origin);
+                if (sameOrigin) {
+                    // Same-origin: we can read the status
+                    fetch(url, { method: 'HEAD', signal: ctrl.signal })
+                        .then(r => dot.classList.add(r.ok ? 'up' : 'down'))
+                        .catch(() => dot.classList.add('down'));
+                } else {
+                    // Cross-origin: opaque response is best we can do (reachable = up)
+                    fetch(url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal })
+                        .then(() => dot.classList.add('up'))
+                        .catch(() => dot.classList.add('down'));
+                }
             });
         });
     </script>
