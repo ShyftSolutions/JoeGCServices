@@ -1115,15 +1115,21 @@
         const mapStations = L.map('map-stations', { scrollWheelZoom: false }).setView([15, -170], 2);
         L.tileLayer(DARK_TILES, { attribution: TILE_ATTR, maxZoom: 12 }).addTo(mapStations);
 
+        // Extract station ID from feature (id may be a full URL)
+        function stationId(f) {
+            const raw = (f.properties || {}).location_id || f.id || '';
+            return String(raw).split('/').pop();
+        }
+
         fetch('/edr/collections/dart/locations')
             .then(r => r.json())
             .then(data => {
                 const features = data.features || [];
-                // Deduplicate by location_id (API may return multiple obs per station)
+                // Deduplicate by station ID
                 const seen = new Map();
                 features.forEach(f => {
-                    const lid = (f.properties || {}).location_id || f.id;
-                    if (!seen.has(lid)) seen.set(lid, f);
+                    const lid = stationId(f);
+                    if (lid && !seen.has(lid)) seen.set(lid, f);
                 });
                 const stations = Array.from(seen.values());
                 document.getElementById('station-count').textContent = stations.length + ' stations';
@@ -1131,8 +1137,8 @@
                 stations.forEach(f => {
                     const coords = f.geometry.coordinates;
                     const props = f.properties || {};
-                    const name = props.name || props.location_id || '';
-                    const lid = props.location_id || '';
+                    const lid = stationId(f);
+                    const name = props.name || '';
                     const height = props.water_column_height_m;
                     const marker = L.circleMarker([coords[1], coords[0]], {
                         radius: 6,
@@ -1170,16 +1176,15 @@
                 const features = data.features || [];
                 const seen = new Map();
                 features.forEach(f => {
-                    const lid = (f.properties || {}).location_id || f.id;
-                    if (!seen.has(lid)) seen.set(lid, f);
+                    const lid = stationId(f);
+                    if (lid && !seen.has(lid)) seen.set(lid, f);
                 });
                 const stations = Array.from(seen.values());
                 document.getElementById('radius-count').textContent = stations.length + ' stations found';
 
                 stations.forEach(f => {
                     const coords = f.geometry.coordinates;
-                    const props = f.properties || {};
-                    const lid = props.location_id || '';
+                    const lid = stationId(f);
                     const marker = L.circleMarker([coords[1], coords[0]], {
                         radius: 6,
                         color: '#22c55e',
