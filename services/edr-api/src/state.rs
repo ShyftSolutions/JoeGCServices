@@ -86,7 +86,7 @@ impl AppState {
 
         // Create high-level grid data service
         let grid_data_service =
-            GridDataService::new(Arc::clone(&catalog), minio_config, chunk_cache_size_mb);
+            GridDataService::new(Arc::clone(&catalog), minio_config, chunk_cache_size_mb)?;
 
         // Create observation catalog for point data (METAR, TAF, etc.)
         let observation_catalog = Arc::new(ObservationCatalog::new(catalog.pool_clone()));

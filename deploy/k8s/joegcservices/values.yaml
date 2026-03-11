@@ -102,6 +102,8 @@ wmsApi:
     ENABLE_L1_CACHE: "true"
     TILE_CACHE_SIZE_MB: "1024"
     TILE_CACHE_TTL_SECS: "300"
+    # Zarr chunk cache
+    CHUNK_CACHE_SIZE_MB: "4096"
     # Prefetch
     ENABLE_PREFETCH: "true"
     PREFETCH_RINGS: "2"
